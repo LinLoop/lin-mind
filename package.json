@@ -1,0 +1,62 @@
+{
+  "name": "lu-mind-mapping",
+  "version": "0.0.5",
+  "description": "lu-mind-mapping is a free open source mind map core.",
+  "main": "dist/MindElixir.js",
+  "scripts": {
+    "start": "webpack-dev-server --mode development --env dist=0",
+    "startd": "webpack-dev-server --mode development --env dist=1",
+    "test": "jest --runInBand",
+    "build": "webpack --mode production",
+    "doc": "./node_modules/.bin/jsdoc src/ -R readme.md -c conf.json",
+    "md": "./node_modules/.bin/jsdoc2md 'src/*.js' > api.md",
+    "publish2": "npm run build && npm version patch -m \"build: release %s\" && npm publish",
+    "beta": "npm run build && npm publish --tag beta"
+  },
+  "files": [
+    "package.json",
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/luchenwei9266/lu-mind-mapping"
+  },
+  "author": "ssshooter",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.4.5",
+    "@babel/plugin-transform-runtime": "^7.12.10",
+    "@babel/preset-env": "^7.11.5",
+    "@babel/runtime": "^7.15.4",
+    "@typescript-eslint/parser": "^5.0.0",
+    "alloyfinger": "^0.1.16",
+    "babel-loader": "^8.0.6",
+    "better-docs": "^2.3.2",
+    "canvg": "^3.0.6",
+    "css-loader": "^6.7.1",
+    "docdash": "^1.1.1",
+    "eslint": "^8.0.0",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^5.3.2",
+    "jest": "^27.5.1",
+    "jsdoc": "^3.6.3",
+    "jsdoc-to-markdown": "^7.1.1",
+    "less": "^4.1.2",
+    "less-loader": "^10.2.0",
+    "puppeteer": "^13.5.1",
+    "puppeteer-to-istanbul": "^1.4.0",
+    "regenerator-runtime": "^0.13.7",
+    "style-loader": "^3.3.1",
+    "terser-webpack-plugin": "^5.3.1",
+    "ts-loader": "^9.2.6",
+    "typescript": "^4.4.3",
+    "url-loader": "^4.1.1",
+    "webpack": "5.70.0",
+    "webpack-bundle-analyzer": "^4.5.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.7.4"
+  },
+  "dependencies": {
+    "lin-mind": "^1.0.11"
+  }
+}

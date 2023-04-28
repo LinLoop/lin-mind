@@ -1,0 +1,85 @@
+toolbar {
+  position: absolute;
+  background: #fff;
+  border-radius: 8px;
+  padding-left: 8px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+  color: #3096EF;
+  display: flex;
+  span {
+    &:active {
+      opacity: 0.5;
+    }
+  }
+}
+.rb {
+  font-size: 12px;
+  left: 120px;
+  bottom: 36px;
+  text-align: center;
+  height: 74px;
+  * {
+    transition: color 0.4s, background-color 0.4s;
+  }
+  div{
+    width: 60px;
+    height: 44px;
+    text-align: center;
+    white-space: nowrap;
+    padding: 8px 0;
+    font-size: 12px;
+    font-weight: bold;
+    margin: 8px 6px 8px 0;
+    border-radius: 5px;
+    img{
+      display: block;
+      width: 28px;
+      height: 28px;
+      margin:0 auto 5px;
+    }
+    &:hover {
+      cursor: pointer;
+    }
+    &:active{
+      background-color: #ecf0f1;
+    }
+    &.disabled {
+      filter: grayscale(1);
+      -webkit-filter: grayscale(1);
+      &:hover {
+        cursor: not-allowed;
+      } 
+    }
+  }
+}
+
+.rb-exit-line::after {
+    position: absolute;
+    top: 12px;
+    right: 68px;
+    content: "";
+    height: 50px;
+    width: 1px;
+    // transform: scaleX(0.5);
+    background: #d6d6d6;
+    display: block;
+}
+.rb-save-line::after {
+    position: absolute;
+    top: 12px;
+    right: 134px;
+    content: "";
+    height: 50px;
+    width: 1px;
+    // transform: scaleX(0.5);
+    background: #d6d6d6;
+    display: block;
+}
+
+@media screen and (max-width: 960px){
+  .rb{
+    transform: scale(.6);
+    bottom: -10px;
+    left: -40px;
+  }
+}
