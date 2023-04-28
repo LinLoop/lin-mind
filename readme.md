@@ -1,15 +1,11 @@
-## lu-mind-mapping
+## lin-mind
 
-lu-mind-mapping 是一个无框架依赖的思维导图内核,本项目是基于[Mind elixir](https://github.com/ssshooter/mind-elixir-core)的功能上进行二次开发，
+lin-mind 是一个无框架依赖的思维导图内核,本项目是基于[Mind elixir](https://github.com/ssshooter/mind-elixir-core)的功能上进行二次开发，
 所以本项目大部分功能与用法均与Mind elixir相同。
 
 ## 建议
 本项目是根据公司业务需求，在原项目([Mind elixir](https://github.com/ssshooter/mind-elixir-core))进行的二次开发。而且，本项目的功能也可能会随业务需求不定时进行改动，如果
 需要一个稳定的版本，强烈建议使用原项目[Mind elixir](https://github.com/ssshooter/mind-elixir-core)，个人认为该项目已满足大部分日常使用。
-
-## 立即尝试
-
-![lu-mind-mapping](https://user-images.githubusercontent.com/9455826/201805817-fdcca8f2-0848-4751-9b7f-89d5b22731e2.png)
 
 ## 如何使用
 
@@ -18,11 +14,11 @@ lu-mind-mapping 是一个无框架依赖的思维导图内核,本项目是基于
 #### NPM
 
 ```bash
-npm i lu-mind-mapping -S
+npm i lin-mind -S
 ```
 
 ```javascript
-import MindElixir, { E } from 'lu-mind-mapping'
+import MindElixir, { E } from 'lin-mind'
 ```
 
 ### HTML 结构
@@ -40,9 +36,9 @@ import MindElixir, { E } from 'lu-mind-mapping'
 ### 初始化
 
 ```javascript
-import MindElixir, { E } from 'lu-mind-mapping'
-import { exportSvg, exportPng } from '../dist/painter'
-import example from '../dist/example1'
+import MindElixir, { E } from 'lin-mind'
+import { exportSvg, exportPng } from './painter'
+import example from './example1'
 
 let options = {
   el: '#map',
@@ -146,7 +142,7 @@ mind.getAllDataMd() // markdown
 **WIP**
 
 ```javascript
-import painter from 'lu-mind-mapping/dist/painter'
+import painter from 'lin-mind/painter'
 painter.exportSvg()
 painter.exportPng()
 ```
@@ -175,24 +171,12 @@ let mind = new MindElixir({
 })
 ```
 
-## 文档
-
-https://doc.mind-elixir.com/
-
-## 与原版本不同的点
-1. 支持用鼠标滚轮缩放整个画布  
-2. 支持触摸屏下双指缩放(已在希沃一体机中测试成功)  
-3. 将原来的鼠标右键点击才会出现的菜单，改为常驻在页面上方，且不在固定只有右键触发该事件  
-4. 去除原来左键菜单的url功能  
-5. 增加分享后仅可阅读，不可编辑的功能(尚未完全完成)  
-6. 修改原来的线条样式，使不同线条区分度更明显  
-7. 增加菜单按钮是否为禁用模式的判断条件，提高用户体验  
-8. ......(TODO)
 
 ## 感谢
 
 [canvg](https://github.com/canvg/canvg)  
-[Mind elixir](https://github.com/ssshooter/mind-elixir-core)
+[Mind elixir](https://github.com/ssshooter/mind-elixir-core)  
+[lu-mind-mapping](https://github.com/luchenwei9266/lu-mind-mapping.git)
 
 
 
