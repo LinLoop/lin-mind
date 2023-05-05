@@ -227,7 +227,6 @@ export const insertParent = function(el, node) {
   } else {
     this.linkDiv(grp.offsetParent)
   }
-
   if (!node) {
     this.createInputDiv(top.children[0])
   }
@@ -247,6 +246,7 @@ export const addChildFunction = function(nodeEle, node) {
     // dom had resetted
     nodeEle = findEle(nodeObj.id)
   }
+
   const newNodeObj = node || this.generateNewObj()
   if (nodeObj.children) nodeObj.children.push(newNodeObj)
   else nodeObj.children = [newNodeObj]
@@ -360,7 +360,6 @@ export const moveUpNode = function(el, history = true) {
   //   //   }
   //   //   sibling = sibling.nextSibling;
   //   // }
-
   // }
   this.linkDiv()
   if (!history) return

@@ -1,11 +1,19 @@
+import { isOutOfBoundary } from '../utils/index'
+
 export default function(mind) {
   const key2func = {
     13: () => {
       // enter
+      if (!mind.currentNode) return
+      const isOut = isOutOfBoundary(mind, 'insertSibling')
+      if (isOut) return
       mind.insertSibling()
     },
     9: () => {
       // tab
+      if (!mind.currentNode) return
+      const isOut = isOutOfBoundary(mind, 'addChild')
+      if (isOut) return
       mind.addChild()
     },
     113: () => {
@@ -64,6 +72,11 @@ export default function(mind) {
       if (!mind.waitCopy) return
       if (e.metaKey || e.ctrlKey) {
       // ctrl v
+        if (!mind.currentNode) return
+        const isOut = isOutOfBoundary(mind, 'copyNode')
+        console.log(isOut)
+        if (isOut) return
+
         mind.copyNode(mind.waitCopy, mind.currentNode)
         mind.waitCopy = null
       }
@@ -91,12 +104,12 @@ export default function(mind) {
   mind.map.onkeydown = e => {
     // console.log(e)
     e.preventDefault()
-    let ele = document.getElementById('currentImg')
-    let div = document.getElementById('currentImg')?.previousElementSibling
+    const ele = document.getElementById('currentImg')
+    const div = document.getElementById('currentImg')?.previousElementSibling
     if (ele) {
-      ele.parentNode.removeChild(div);
-      ele.parentNode.removeChild(ele);
-      mind.linkDiv();
+      ele.parentNode.removeChild(div)
+      ele.parentNode.removeChild(ele)
+      mind.linkDiv()
     }
     if (!mind.editable) return
     // console.log(e, e.target)

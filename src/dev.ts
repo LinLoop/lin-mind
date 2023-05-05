@@ -30,21 +30,14 @@ const options = {
     link: true,
     extend: [
       // {
-      //   name: '层数',
+      //   name: '所在层数',
       //   onclick: async() => {
-      //     console.log(mind.currentNode.nodeObj)
-      //     // const currentNode = getObjectDepth(mind.currentNode.nodeObj)
-      //     // function getObjectDepth(object) {
-      //     //   let depth = 0
-      //     //   if (object.parent) depth = getObjectDepth(object[key]) + 1
-
-      //     //   return depth
-      //     // }
+      //   console.log(mind.currentNode.nodeObj)
       //   },
       // },
     ],
   },
-  toolBar: false,
+  toolBar: true,
   nodeMenu: true,
   keypress: true,
   allowUndo: true,
@@ -65,7 +58,7 @@ const options = {
       return true
     },
   },
-  primaryLinkStyle: '1',
+  primaryLinkStyle: 1,
   primaryNodeVerticalGap: 25, // 25
   primaryNodeHorizontalGap: 65, // 65
 }

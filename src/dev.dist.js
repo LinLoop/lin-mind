@@ -47,8 +47,8 @@ const mind = new MindElixir({
     },
   },
   // primaryLinkStyle: 2,
-  primaryNodeVerticalGap: 15, // 25
-  primaryNodeHorizontalGap: 15, // 65
+  primaryNodeVerticalGap: 25, // 25
+  primaryNodeHorizontalGap: 65, // 65
 })
 mind.init(example)
 function sleep() {

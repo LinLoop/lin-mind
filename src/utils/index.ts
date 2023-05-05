@@ -1,4 +1,73 @@
 import { NodeObj } from '../index'
+import { findEle } from './dom'
+
+// 判断新增元素是否超出边界 是返回true 否返回false
+export function isOutOfBoundary(mind:any, option: string) {
+  const isRoot = mind.currentNode.parentElement.tagName === 'ROOT'
+  if (isRoot) return false
+  const currentNode = mind.currentNode.parentElement.parentElement
+  const currentNodeObj = mind.currentNode.nodeObj
+  const { primaryNodeHorizontalGap, primaryNodeVerticalGap } = mind
+
+  let nodeEle
+  let maxChildWidth = 800
+  let maxChildHeight = 200
+  const canvasHeight = 20000
+  const canvasWidth = 20000
+
+  if (option === 'insertParent' || option === 'addChild') {
+    const { node: deepestChild } = findDeepestChild(currentNodeObj)
+    nodeEle = findEle(deepestChild.id).parentElement.parentElement
+  } else if (option === 'copyNode') {
+    maxChildWidth = mind.waitCopy.parentElement.parentElement.offsetWidth
+    maxChildHeight = mind.waitCopy.parentElement.parentElement.offsetHeight
+    nodeEle = currentNode
+  } else if (option === 'insertSibling') {
+    // insertSibling
+    nodeEle = currentNode.parentElement.lastElementChild
+  } else {
+    return false
+  }
+
+  const canvas = document.querySelector('.map-canvas')
+  const nodePosition = nodeEle.getBoundingClientRect()
+  const canvasPosition = canvas.getBoundingClientRect()
+
+  // 节点相对 canvas 距离
+  const left = nodePosition.left - canvasPosition.left
+  const top = nodePosition.top - canvasPosition.top
+
+  console.log(left, top, maxChildWidth, maxChildHeight)
+
+  if (
+    ['insertParent', 'addChild', 'copyNode'].includes(option) &&
+    (left < maxChildWidth + primaryNodeHorizontalGap || left > canvasWidth - maxChildWidth - primaryNodeHorizontalGap)
+  ) return true
+  if (
+    ['insertSibling', 'copyNode'].includes(option) &&
+    (top < maxChildHeight + primaryNodeVerticalGap || top > canvasHeight - maxChildHeight - primaryNodeVerticalGap)
+  ) return true
+  return false
+}
+
+// 查找最深子节点
+export function findDeepestChild(element) {
+  const children = element?.children ?? []
+  if (children.length === 0) {
+    return { node: element, depth: 1 }
+  }
+  let maxDepth = -1
+  let deepestChild = null
+  for (let i = 0; i < children.length; i++) {
+    const child = children[i]
+    const { node, depth } = findDeepestChild(child)
+    if (depth > maxDepth) {
+      maxDepth = depth
+      deepestChild = node
+    }
+  }
+  return { node: deepestChild, depth: maxDepth + 1 }
+}
 
 export function encodeHTML(s) {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;')

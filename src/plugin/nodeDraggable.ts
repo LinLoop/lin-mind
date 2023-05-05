@@ -36,7 +36,7 @@ const canPreview = function(el:Element, dragged:Topic) {
     el !== dragged &&
     !isContain
     //  &&
-    // (el as Topic).nodeObj.root !== true
+    // (el as Topic).nodeObj.root !== true // 修复无法移到根节点问题
   )
 }
 
@@ -55,6 +55,7 @@ export default function(mind) {
   mind.map.addEventListener('dragend', async function(e: DragEvent) {
     (e.target as HTMLElement).style.opacity = ''
     clearPreview(meet)
+
     const obj = dragged.nodeObj
     switch (insertLocation) {
       case 'before':

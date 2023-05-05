@@ -1,5 +1,5 @@
 import i18n from '../i18n'
-import { encodeHTML } from '../utils/index'
+import { encodeHTML, isOutOfBoundary } from '../utils/index'
 import './contextMenu.less'
 
 export default function(mind, option) {
@@ -161,15 +161,22 @@ export default function(mind, option) {
   }
 
   add_child.onclick = e => {
+    if (!mind.currentNode) return
+    const isOut = isOutOfBoundary(mind, 'addChild')
+    if (isOut) return
     mind.addChild()
     // menuContainer.hidden = true
   }
   add_parent.onclick = e => {
+    const isOut = isOutOfBoundary(mind, 'insertParent')
+    if (isOut) return
     mind.insertParent()
     // menuContainer.hidden = true
   }
   add_sibling.onclick = e => {
-    if (isRoot) return
+    if (isRoot || !mind.currentNode) return
+    const isOut = isOutOfBoundary(mind, 'insertSibling')
+    if (isOut) return
     mind.insertSibling()
     // menuContainer.hidden = true
   }

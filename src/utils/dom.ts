@@ -46,7 +46,7 @@ export const shapeTpc = function(tpc: Topic, nodeObj: NodeObj) {
     linkContainer.href = nodeObj.hyperLink
     tpc.appendChild(linkContainer)
     tpc.linkContainer = linkContainer
-    console.log(linkContainer)
+    // console.log(linkContainer)
   } else if (tpc.linkContainer) {
     tpc.linkContainer.remove()
     tpc.linkContainer = null
@@ -177,7 +177,7 @@ export function createInputDiv(tpc: Topic) {
       const tempParentNode = tpc.parentNode
       const fr = new FileReader()
       // 读取file 然后取回base64 编码路径
-      fr.readAsDataURL(file)
+      if (file) fr.readAsDataURL(file)
       fr.onload = (e) => {
         const tempDiv = document.createElement('div')
         tempDiv.style.marginTop = '6px'
