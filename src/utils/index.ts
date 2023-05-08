@@ -1,10 +1,37 @@
 import { NodeObj } from '../index'
 import { findEle } from './dom'
 
+// 获取分支深度
+export function getBranchDepth(nodeObj: NodeObj) {
+  const childDepth = getNodeChildDepth(nodeObj)
+  const nodeDepth = getNodeDepth(nodeObj)
+  return childDepth + nodeDepth - 1
+}
+
+// 获取子节点深度
+export function getNodeChildDepth(nodeObj: NodeObj) {
+  let depth = 0
+  if (nodeObj.children) {
+    for (let i = 0; i < nodeObj.children.length; i++) {
+      const childDepth = getNodeChildDepth(nodeObj.children[i])
+      if (childDepth > depth) {
+        depth = childDepth
+      }
+    }
+  }
+  return depth + 1
+}
+
+// 判断当前深度
+export function getNodeDepth(nodeObj: NodeObj, currentDepth: number = 0) {
+  currentDepth = !nodeObj.parent ? currentDepth++ : getNodeDepth(nodeObj.parent, currentDepth) + 1
+  return currentDepth
+}
+
 // 判断新增元素是否超出边界 是返回true 否返回false
-export function isOutOfBoundary(mind:any, option: string) {
+export function isOutOfBoundary(mind: any, option: string) {
   const isRoot = mind.currentNode.parentElement.tagName === 'ROOT'
-  if (isRoot) return false
+  if (isRoot && option !== 'insertSibling') return false
   const currentNode = mind.currentNode.parentElement.parentElement
   const currentNodeObj = mind.currentNode.nodeObj
   const { primaryNodeHorizontalGap, primaryNodeVerticalGap } = mind
@@ -37,16 +64,20 @@ export function isOutOfBoundary(mind:any, option: string) {
   const left = nodePosition.left - canvasPosition.left
   const top = nodePosition.top - canvasPosition.top
 
-  console.log(left, top, maxChildWidth, maxChildHeight)
+  // console.log(left, top, maxChildWidth, maxChildHeight)
 
   if (
     ['insertParent', 'addChild', 'copyNode'].includes(option) &&
     (left < maxChildWidth + primaryNodeHorizontalGap || left > canvasWidth - maxChildWidth - primaryNodeHorizontalGap)
-  ) return true
+  ) {
+    return true
+  }
   if (
     ['insertSibling', 'copyNode'].includes(option) &&
     (top < maxChildHeight + primaryNodeVerticalGap || top > canvasHeight - maxChildHeight - primaryNodeVerticalGap)
-  ) return true
+  ) {
+    return true
+  }
   return false
 }
 
@@ -69,24 +100,35 @@ export function findDeepestChild(element) {
   return { node: deepestChild, depth: maxDepth + 1 }
 }
 
+// 创建提示语
+export const createToast = words => {
+  if (document.getElementById('mindToast')) return
+  const div = document.createElement('div')
+  const mindContainer = document.querySelector('.map-container')
+  div.id = 'mindToast'
+  div.innerText = words
+  div.style.cssText =
+    'position:absolute;top:110px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.7);color:#FFF;border-radius:5px;padding:8px 12px'
+  mindContainer.appendChild(div)
+  const timer = setTimeout(() => {
+    mindContainer.removeChild(div)
+    clearTimeout(timer)
+  }, 2000)
+}
+
 export function encodeHTML(s) {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;')
 }
 
-export const isMobile = (): boolean =>
-  /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-    navigator.userAgent
-  )
+export const isMobile = (): boolean => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 
-export const rgbHex = (rgb) => {
-  return rgb.replace(
-    /\brgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/g,
-    function($0, $1, $2, $3) {
-      return '#' + ('0' + Number($1).toString(16)).substr(-2) + ('0' + Number($2).toString(16)).substr(-2) + ('0' + Number($3).toString(16)).substr(-2)
-    })
+export const rgbHex = rgb => {
+  return rgb.replace(/\brgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/g, function ($0, $1, $2, $3) {
+    return '#' + ('0' + Number($1).toString(16)).substr(-2) + ('0' + Number($2).toString(16)).substr(-2) + ('0' + Number($3).toString(16)).substr(-2)
+  })
 }
 
-export const getObjById = function(id: string, data: NodeObj) {
+export const getObjById = function (id: string, data: NodeObj) {
   data = data || this.nodeData
   if (data.id === id) {
     return data
@@ -120,7 +162,7 @@ export function refreshIds(data: NodeObj) {
 
 export const throttle = (fn: (any) => void, wait: number) => {
   var pre = Date.now()
-  return function() {
+  return function () {
     var context = this
     var args = arguments
     var now = Date.now()
@@ -213,9 +255,7 @@ export function calcP4(toData, p3x, p3y) {
 }
 
 export function generateUUID(): string {
-  return (
-    new Date().getTime().toString(16) + Math.random().toString(16).substr(2)
-  ).substr(2, 16)
+  return (new Date().getTime().toString(16) + Math.random().toString(16).substr(2)).substr(2, 16)
 }
 
 export function generateNewObj(): NodeObj {
@@ -324,9 +364,11 @@ export function getQueryVariable(variable) {
   const vars = query.split('&')
   for (let i = 0; i < vars.length; i++) {
     const pair = vars[i].split('=')
-    if (pair[0] == variable) { return pair[1] }
+    if (pair[0] == variable) {
+      return pair[1]
+    }
   }
-  return (false)
+  return false
 }
 
 export function moveNodeBeforeObj(from: NodeObj, to: NodeObj) {
@@ -370,10 +412,7 @@ export const dragMoveHelper = {
       }
       const deltaX = this.lastX - e.pageX
       const deltaY = this.lastY - e.pageY
-      container.scrollTo(
-        container.scrollLeft + deltaX,
-        container.scrollTop + deltaY
-      )
+      container.scrollTo(container.scrollLeft + deltaX, container.scrollTop + deltaY)
       this.lastX = e.pageX
       this.lastY = e.pageY
     }
@@ -393,7 +432,7 @@ export function LinkDragMoveHelper(dom) {
   this.lastY = null
 }
 
-LinkDragMoveHelper.prototype.init = function(map, cb) {
+LinkDragMoveHelper.prototype.init = function (map, cb) {
   this.handleMouseMove = e => {
     e.stopPropagation()
     if (this.mousedown) {
@@ -423,14 +462,14 @@ LinkDragMoveHelper.prototype.init = function(map, cb) {
   this.dom.addEventListener('mousedown', this.handleMouseDown)
 }
 
-LinkDragMoveHelper.prototype.destory = function(map) {
+LinkDragMoveHelper.prototype.destory = function (map) {
   map.removeEventListener('mousemove', this.handleMouseMove)
   map.removeEventListener('mouseleave', this.handleClear)
   map.removeEventListener('mouseup', this.handleClear)
   this.dom.removeEventListener('mousedown', this.handleMouseDown)
 }
 
-LinkDragMoveHelper.prototype.clear = function() {
+LinkDragMoveHelper.prototype.clear = function () {
   this.mousedown = false
   this.lastX = null
   this.lastY = null

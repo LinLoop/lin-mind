@@ -30,6 +30,7 @@ const cn = {
   tagsSeparate: '多个标签半角逗号分隔',
   iconsSeparate: '多个图标半角逗号分隔',
   url: 'URL',
+  boundaryTips: '创建失败，超出上限',
 }
 export default {
   cn,
@@ -66,6 +67,7 @@ export default {
     tagsSeparate: '多個標簽半角逗號分隔',
     iconsSeparate: '多個圖標半角逗號分隔',
     url: 'URL',
+    boundaryTips: '創建失敗，超出上限',
   },
   en: {
     packup: 'Packup',
@@ -99,6 +101,8 @@ export default {
     tagsSeparate: 'Separate tags by comma',
     iconsSeparate: 'Separate icons by comma',
     url: 'URL',
+
+    boundaryTips: 'Out of boundary',
   },
   ja: {
     addChild: '子ノードを追加する',

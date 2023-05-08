@@ -31,15 +31,13 @@ function generateSvgDom() {
     }
     svgContent += PrimaryToSvg(primaryNode)
   }
-  console.log(maxTop, maxBottom, maxLeft, maxRight)
+  // console.log(maxTop, maxBottom, maxLeft, maxRight)
   svgContent += RootToSvg()
   // 需要添加图片边缘padding
   const svgHeight = maxBottom - maxTop + imgPadding * 2
   const svgWidth = maxRight - maxLeft + imgPadding * 2
   const svgFile = createSvg(svgHeight, svgWidth)
-  svgContent =
-    `<rect x="0" y="0" width="${svgWidth}" height="${svgHeight}" fill="#f6f6f6"></rect>` +
-    svgContent
+  svgContent = `<rect x="0" y="0" width="${svgWidth}" height="${svgHeight}" fill="#f6f6f6"></rect>` + svgContent
   svgFile.innerHTML = svgContent
   // document.body.append(svgFile)
   return svgFile
@@ -67,17 +65,11 @@ function RootToSvg() {
 
   const svg2ndEle = document.querySelector('.lines')
 
-  const lines = `<g transform="translate(${imgPadding - maxLeft}, ${
-    imgPadding - maxTop
-  })">${svg2ndEle.innerHTML}</g>`
+  const lines = `<g transform="translate(${imgPadding - maxLeft}, ${imgPadding - maxTop})">${svg2ndEle.innerHTML}</g>`
   return (
     lines +
-    `<g id="root" transform="translate(${rootOffsetX + imgPadding}, ${
-      rootOffsetY + imgPadding
-    })">
-      <rect x="${left}" y="${top}" rx="5px" ry="5px" width="${
-      rect.width
-    }" height="${rect.height}" style="fill: #00aaff;"></rect>
+    `<g id="root" transform="translate(${rootOffsetX + imgPadding}, ${rootOffsetY + imgPadding})">
+      <rect x="${left}" y="${top}" rx="5px" ry="5px" width="${rect.width}" height="${rect.height}" style="fill: #00aaff;"></rect>
       <text x="${left + 15}" y="${
       top + 35
     }" text-anchor="start" align="top" anchor="start" font-family="微软雅黑" font-size="25px" font-weight="normal" fill="#ffffff">
@@ -94,47 +86,35 @@ function PrimaryToSvg(primaryNode) {
 
   let svg = ''
   const subLines = primaryNode.querySelector('.subLines')
-  svg += `<g transform="translate(${primaryNodeOffsetX + imgPadding}, ${
-    primaryNodeOffsetY + imgPadding
-  })">`
+  svg += `<g transform="translate(${primaryNodeOffsetX + imgPadding}, ${primaryNodeOffsetY + imgPadding})">`
   svg += subLines ? subLines.innerHTML : ''
   for (let i = 0; i < topics.length; i++) {
     const tpc = topics[i]
     const t = tpc.parentNode
     const nodeObj = tpc.nodeObj
-    if (nodeObj.root) { continue }
+    if (nodeObj.root) {
+      continue
+    }
     const tpcRect = tpc.getBoundingClientRect()
     const top = t.offsetTop
     const left = t.offsetLeft
     const tpcStyle = getComputedStyle(tpc)
     const tStyle = getComputedStyle(t)
-    const topicOffsetLeft =
-      left + parseInt(tStyle.paddingLeft) + parseInt(tpcStyle.paddingLeft)
-    const topicOffsetTop =
-      top +
-      parseInt(tStyle.paddingTop) +
-      parseInt(tpcStyle.paddingTop) +
-      parseInt(tpcStyle.fontSize)
-    const topicOffsetTopTop =
-      top +
-      parseInt(tStyle.paddingTop) +
-      parseInt(tpcStyle.paddingTop)
+    const topicOffsetLeft = left + parseInt(tStyle.paddingLeft) + parseInt(tpcStyle.paddingLeft)
+    const topicOffsetTop = top + parseInt(tStyle.paddingTop) + parseInt(tpcStyle.paddingTop) + parseInt(tpcStyle.fontSize)
+    const topicOffsetTopTop = top + parseInt(tStyle.paddingTop) + parseInt(tpcStyle.paddingTop)
     // style render
     let border = ''
     if (tpcStyle.borderWidth != '0px') {
-      border = `<rect x="${left + 15}" y="${top}" rx="5px" ry="5px" width="${
-        tpcRect.width
-      }" height="${
+      border = `<rect x="${left + 15}" y="${top}" rx="5px" ry="5px" width="${tpcRect.width}" height="${
         tpcRect.height
       }" style="fill: rgba(0,0,0,0); stroke:#444;stroke-width:1px;"></rect>`
     }
     let backgroundColor = ''
     if (tpcStyle.backgroundColor != 'rgba(0, 0, 0, 0)') {
-      backgroundColor = `<rect x="${
-        left + 15
-      }" y="${top}" rx="5px" ry="5px" width="${tpcRect.width}" height="${
-        tpcRect.height
-      }" style="fill: ${tpcStyle.backgroundColor};"></rect>`
+      backgroundColor = `<rect x="${left + 15}" y="${top}" rx="5px" ry="5px" width="${tpcRect.width}" height="${tpcRect.height}" style="fill: ${
+        tpcStyle.backgroundColor
+      };"></rect>`
     }
     // render tags
     let tags = ''
@@ -143,14 +123,12 @@ function PrimaryToSvg(primaryNode) {
       for (let i = 0; i < tagsEle.length; i++) {
         const tag = tagsEle[i]
         const tagRect = tag.getBoundingClientRect()
-        tags += `<rect x="${topicOffsetLeft}" y="${
-          topicOffsetTop + 4
-        }" rx="5px" ry="5px" width="${tagRect.width}" height="${
+        tags += `<rect x="${topicOffsetLeft}" y="${topicOffsetTop + 4}" rx="5px" ry="5px" width="${tagRect.width}" height="${
           tagRect.height
         }" style="fill: #d6f0f8;"></rect>
-        <text font-family="微软雅黑" font-size="12px"  fill="#276f86" x="${
-  topicOffsetLeft + 4
-}" y="${topicOffsetTop + 4 + 12}">${tag.innerHTML}</text>`
+        <text font-family="微软雅黑" font-size="12px"  fill="#276f86" x="${topicOffsetLeft + 4}" y="${topicOffsetTop + 4 + 12}">${
+          tag.innerHTML
+        }</text>`
       }
     }
     let icons = ''
@@ -180,27 +158,22 @@ function PrimaryToSvg(primaryNode) {
   return svg
 }
 
-export const exportSvg = function() {
+export const exportSvg = function () {
   const svgFile = generateSvgDom()
-  const dlUrl = URL.createObjectURL(
-    new Blob([head + svgFile.outerHTML.replace(/&nbsp;/g, ' ')])
-  )
+  const dlUrl = URL.createObjectURL(new Blob([head + svgFile.outerHTML.replace(/&nbsp;/g, ' ')]))
   const a = document.createElement('a')
   a.href = dlUrl
   a.download = 'me-mindmap.svg'
   a.click()
 }
 
-export const exportPng = async function() {
+export const exportPng = async function () {
   const svgFile = generateSvgDom()
   const canvas = document.createElement('canvas')
   canvas.style.display = 'none'
   const ctx = canvas.getContext('2d')
   // Canvg do not support foreignObject
-  const v = await Canvg.fromString(
-    ctx,
-    head + svgFile.outerHTML.replace(/&nbsp;/g, ' ')
-  )
+  const v = await Canvg.fromString(ctx, head + svgFile.outerHTML.replace(/&nbsp;/g, ' '))
   v.start()
   const imgURL = canvas.toDataURL('image/png')
   const a = document.createElement('a')
@@ -210,5 +183,6 @@ export const exportPng = async function() {
 }
 
 export default {
-  exportSvg, exportPng,
+  exportSvg,
+  exportPng,
 }

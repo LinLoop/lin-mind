@@ -32,7 +32,7 @@ const options = {
       // {
       //   name: '所在层数',
       //   onclick: async() => {
-      //   console.log(mind.currentNode.nodeObj)
+      //     console.log(mind.currentNode.nodeObj)
       //   },
       // },
     ],

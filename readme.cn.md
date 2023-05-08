@@ -1,15 +1,40 @@
-## lu-mind-mapping
+## (20221018)本项目是为了满足公司现有业务需求做出的Demo版本，如需正式使用请考虑使用原作者项目，原项目比较完整而且能适用大部分场景，以下说明均为原作者的README内容。
 
-lu-mind-mapping 是一个无框架依赖的思维导图内核,本项目是基于[Mind elixir](https://github.com/ssshooter/mind-elixir-core)的功能上进行二次开发，
-所以本项目大部分功能与用法均与Mind elixir相同。
+![mindelixir logo](https://raw.githubusercontent.com/ssshooter/mind-elixir-core/master/images/logo.png)
 
-## 建议
-本项目是根据公司业务需求，在原项目([Mind elixir](https://github.com/ssshooter/mind-elixir-core))进行的二次开发。而且，本项目的功能也可能会随业务需求不定时进行改动，如果
-需要一个稳定的版本，强烈建议使用原项目[Mind elixir](https://github.com/ssshooter/mind-elixir-core)，个人认为该项目已满足大部分日常使用。
+<p>
+  <a href="https://www.npmjs.com/package/mind-elixir">
+    <img src="https://img.shields.io/npm/v/mind-elixir" alt="version">
+  </a>
+  <img src="https://img.shields.io/npm/l/mind-elixir" alt="license">
+  <a href="https://app.codacy.com/gh/ssshooter/mind-elixir-core?utm_source=github.com&utm_medium=referral&utm_content=ssshooter/mind-elixir-core&utm_campaign=Badge_Grade_Settings">
+    <img src="https://api.codacy.com/project/badge/Grade/09fadec5bf094886b30cea6aabf3a88b" alt="code quality">
+  </a>
+  <a href="https://bundlephobia.com/result?p=mind-elixir">
+    <img src="https://badgen.net/bundlephobia/dependency-count/mind-elixir" alt="dependency-count">
+  </a>
+  <a href="https://packagephobia.com/result?p=mind-elixir">
+    <img src="https://packagephobia.com/badge?p=mind-elixir" alt="dependency-count">
+  </a>
+</p>
+
+Mind elixir 是一个无框架依赖的思维导图内核
+
+[English](https://github.com/ssshooter/mind-elixir-core/blob/master/readme.md)
 
 ## 立即尝试
 
-![lu-mind-mapping](https://user-images.githubusercontent.com/9455826/201805817-fdcca8f2-0848-4751-9b7f-89d5b22731e2.png)
+![mindelixir](https://raw.githubusercontent.com/ssshooter/mind-elixir-core/master/images/screenshot.png)
+
+https://mind-elixir.com/#/
+
+### Playground
+
+https://codepen.io/ssshooter/pen/GVQRYK
+
+with React https://codesandbox.io/s/mind-elixir-react-9sisb
+
+with Vue https://codesandbox.io/s/mind-elixir-vue-nqjjl
 
 ## 如何使用
 
@@ -18,11 +43,17 @@ lu-mind-mapping 是一个无框架依赖的思维导图内核,本项目是基于
 #### NPM
 
 ```bash
-npm i lu-mind-mapping -S
+npm i mind-elixir -S
 ```
 
 ```javascript
-import MindElixir, { E } from 'lu-mind-mapping'
+import MindElixir, { E } from 'mind-elixir'
+```
+
+#### Script 标签
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/mind-elixir/dist/mind-elixir.js"></script>
 ```
 
 ### HTML 结构
@@ -40,7 +71,7 @@ import MindElixir, { E } from 'lu-mind-mapping'
 ### 初始化
 
 ```javascript
-import MindElixir, { E } from 'lu-mind-mapping'
+import MindElixir, { E } from 'mind-elixir'
 import { exportSvg, exportPng } from '../dist/painter'
 import example from '../dist/example1'
 
@@ -146,7 +177,7 @@ mind.getAllDataMd() // markdown
 **WIP**
 
 ```javascript
-import painter from 'lu-mind-mapping/dist/painter'
+import painter from 'mind-elixir/dist/painter'
 painter.exportSvg()
 painter.exportPng()
 ```
@@ -179,20 +210,6 @@ let mind = new MindElixir({
 
 https://doc.mind-elixir.com/
 
-## 与原版本不同的点
-1. 支持用鼠标滚轮缩放整个画布  
-2. 支持触摸屏下双指缩放(已在希沃一体机中测试成功)  
-3. 将原来的鼠标右键点击才会出现的菜单，改为常驻在页面上方，且不在固定只有右键触发该事件  
-4. 去除原来左键菜单的url功能  
-5. 增加分享后仅可阅读，不可编辑的功能(尚未完全完成)  
-6. 修改原来的线条样式，使不同线条区分度更明显  
-7. 增加菜单按钮是否为禁用模式的判断条件，提高用户体验  
-8. ......(TODO)
-
 ## 感谢
 
-[canvg](https://github.com/canvg/canvg)  
-[Mind elixir](https://github.com/ssshooter/mind-elixir-core)
-
-
-
+[canvg](https://github.com/canvg/canvg)

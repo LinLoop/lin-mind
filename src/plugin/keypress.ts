@@ -1,19 +1,22 @@
-import { isOutOfBoundary } from '../utils/index'
+import { getBranchDepth, isOutOfBoundary, createToast, getNodeChildDepth, getNodeDepth } from '../utils/index'
+import i18n from '../i18n'
 
-export default function(mind) {
+export default function (mind) {
+  const locale = i18n[mind.locale] ? mind.locale : 'en'
   const key2func = {
     13: () => {
       // enter
       if (!mind.currentNode) return
       const isOut = isOutOfBoundary(mind, 'insertSibling')
-      if (isOut) return
+      if (isOut) return createToast(i18n[locale].boundaryTips)
       mind.insertSibling()
     },
     9: () => {
       // tab
       if (!mind.currentNode) return
-      const isOut = isOutOfBoundary(mind, 'addChild')
-      if (isOut) return
+      const depth = getBranchDepth(mind.currentNode.nodeObj)
+      const childLength = mind.currentNode.nodeObj.children?.length ?? 0
+      if (depth >= mind.maxChildNode && childLength <= 1) return createToast(i18n[locale].boundaryTips)
       mind.addChild()
     },
     113: () => {
@@ -33,24 +36,16 @@ export default function(mind) {
       if (!mind.currentNode) return
       if (mind.currentNode.offsetParent.offsetParent.className === 'rhs') {
         mind.selectParent()
-      } else if (
-        mind.currentNode.offsetParent.offsetParent.className === 'lhs' ||
-        mind.currentNode.nodeObj.root
-      ) {
+      } else if (mind.currentNode.offsetParent.offsetParent.className === 'lhs' || mind.currentNode.nodeObj.root) {
         mind.selectFirstChild()
       }
     },
     39: () => {
       // right
       if (!mind.currentNode) return
-      if (
-        mind.currentNode.offsetParent.offsetParent.className === 'rhs' ||
-        mind.currentNode.nodeObj.root
-      ) {
+      if (mind.currentNode.offsetParent.offsetParent.className === 'rhs' || mind.currentNode.nodeObj.root) {
         mind.selectFirstChild()
-      } else if (
-        mind.currentNode.offsetParent.offsetParent.className === 'lhs'
-      ) {
+      } else if (mind.currentNode.offsetParent.offsetParent.className === 'lhs') {
         mind.selectParent()
       }
     },
@@ -64,18 +59,18 @@ export default function(mind) {
     },
     67(e) {
       if (e.metaKey || e.ctrlKey) {
-      // ctrl c
+        // ctrl c
         mind.waitCopy = mind.currentNode
       }
     },
     86(e) {
       if (!mind.waitCopy) return
       if (e.metaKey || e.ctrlKey) {
-      // ctrl v
+        // ctrl v
         if (!mind.currentNode) return
-        const isOut = isOutOfBoundary(mind, 'copyNode')
-        console.log(isOut)
-        if (isOut) return
+        const childDepth = getNodeChildDepth(mind.waitCopy.nodeObj)
+        const nodeDepth = getNodeDepth(mind.currentNode.nodeObj)
+        if (childDepth + nodeDepth > 10) return createToast(i18n[locale].boundaryTips)
 
         mind.copyNode(mind.waitCopy, mind.currentNode)
         mind.waitCopy = null

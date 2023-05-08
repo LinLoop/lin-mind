@@ -21,12 +21,12 @@ export const findEle = (id: string, instance?) => {
   return scope.querySelector(`[data-nodeid=me${id}]`)
 }
 
-export const shapeTpc = function(tpc: Topic, nodeObj: NodeObj) {
+export const shapeTpc = function (tpc: Topic, nodeObj: NodeObj) {
   tpc.textContent = nodeObj.topic
 
   if (nodeObj.style) {
     tpc.style.color = nodeObj.style.color // || 'inherit'    //修复向左向右结构root丢失样式bug
-    tpc.style.background = nodeObj.style.background// || 'inherit' //修复向左向右结构root丢失样式bug
+    tpc.style.background = nodeObj.style.background // || 'inherit' //修复向左向右结构root丢失样式bug
     tpc.style.fontSize = nodeObj.style.fontSize + 'px'
     tpc.style.fontWeight = nodeObj.style.fontWeight || 'normal'
   }
@@ -54,22 +54,18 @@ export const shapeTpc = function(tpc: Topic, nodeObj: NodeObj) {
   if (nodeObj.icons && nodeObj.icons.length) {
     const iconsContainer = $d.createElement('span')
     iconsContainer.className = 'icons'
-    iconsContainer.innerHTML = nodeObj.icons
-      .map(icon => `<span>${encodeHTML(icon)}</span>`)
-      .join('')
+    iconsContainer.innerHTML = nodeObj.icons.map(icon => `<span>${encodeHTML(icon)}</span>`).join('')
     tpc.appendChild(iconsContainer)
   }
   if (nodeObj.tags && nodeObj.tags.length) {
     const tagsContainer = $d.createElement('div')
     tagsContainer.className = 'tags'
-    tagsContainer.innerHTML = nodeObj.tags
-      .map(tag => `<span>${encodeHTML(tag)}</span>`)
-      .join('')
+    tagsContainer.innerHTML = nodeObj.tags.map(tag => `<span>${encodeHTML(tag)}</span>`).join('')
     tpc.appendChild(tagsContainer)
   }
 }
 
-export const createGroup = function(nodeObj: NodeObj, omitChildren?: boolean) {
+export const createGroup = function (nodeObj: NodeObj, omitChildren?: boolean) {
   const grp: Group = $d.createElement('GRP')
   const top: Top = this.createTop(nodeObj)
   grp.appendChild(top)
@@ -83,7 +79,7 @@ export const createGroup = function(nodeObj: NodeObj, omitChildren?: boolean) {
   return { grp, top }
 }
 
-export const createTop = function(nodeObj: NodeObj): Top {
+export const createTop = function (nodeObj: NodeObj): Top {
   const top = $d.createElement('t')
   const tpc = this.createTopic(nodeObj)
   shapeTpc(tpc, nodeObj)
@@ -91,7 +87,7 @@ export const createTop = function(nodeObj: NodeObj): Top {
   return top
 }
 
-export const createTopic = function(nodeObj: NodeObj): Topic {
+export const createTopic = function (nodeObj: NodeObj): Topic {
   const topic: Topic = $d.createElement('tpc')
   topic.nodeObj = nodeObj
   topic.dataset.nodeid = 'me' + nodeObj.id
@@ -110,7 +106,7 @@ export function selectText(div: HTMLElement) {
 }
 
 export function createInputDiv(tpc: Topic) {
-  console.time('createInputDiv')
+  // console.time('createInputDiv')
   if (!tpc) return
   let div = $d.createElement('div')
   const origin = tpc.childNodes[0].textContent as string
@@ -119,7 +115,12 @@ export function createInputDiv(tpc: Topic) {
   div.textContent = origin
   div.contentEditable = 'true'
   div.spellcheck = false
-  div.style.cssText = `min-width:${tpc.offsetWidth - 22}px`
+
+  // 修复输入框宽度不够问题
+  const style = getComputedStyle(tpc)
+  const gap = +style.getPropertyValue('padding-left').replace('px', '') * 2 + 2
+  div.style.cssText = `min-width:${tpc.offsetWidth - gap}px`
+
   if (this.direction === LEFT) div.style.right = '0'
   div.focus()
 
@@ -149,7 +150,6 @@ export function createInputDiv(tpc: Topic) {
     if (!div) return
     const node = tpc.nodeObj
     const topic = div.textContent!.trim()
-    console.log(topic)
     if (topic === '') node.topic = origin
     else node.topic = topic
     div.remove()
@@ -164,7 +164,7 @@ export function createInputDiv(tpc: Topic) {
     })
   })
 
-  div.addEventListener('paste', (event) => {
+  div.addEventListener('paste', event => {
     const item = event.clipboardData && event.clipboardData.items
     let file = null
     if (item && item.length) {
@@ -178,7 +178,7 @@ export function createInputDiv(tpc: Topic) {
       const fr = new FileReader()
       // 读取file 然后取回base64 编码路径
       if (file) fr.readAsDataURL(file)
-      fr.onload = (e) => {
+      fr.onload = e => {
         const tempDiv = document.createElement('div')
         tempDiv.style.marginTop = '6px'
         const img = document.createElement('img')
@@ -190,10 +190,10 @@ export function createInputDiv(tpc: Topic) {
       }
     }
   })
-  console.timeEnd('createInputDiv')
+  // console.timeEnd('createInputDiv')
 }
 
-export const createExpander = function(expanded: boolean | undefined): Expander {
+export const createExpander = function (expanded: boolean | undefined): Expander {
   const expander: Expander = $d.createElement('epd')
   // 包含未定义 expanded 的情况，未定义视为展开
   expander.expanded = expanded !== false
@@ -263,23 +263,25 @@ export function layout() {
     let lcount = 0
     let rcount = 0
     // .sort((a, b) => a.direction - b.direction)
-    primaryNodes.sort((a, b) => a.direction - b.direction).map(node => {
-      if (node.direction === undefined) {
-        if (lcount <= rcount) {
-          node.direction = LEFT
-          lcount += 1
+    primaryNodes
+      .sort((a, b) => a.direction - b.direction)
+      .map(node => {
+        if (node.direction === undefined) {
+          if (lcount <= rcount) {
+            node.direction = LEFT
+            lcount += 1
+          } else {
+            node.direction = RIGHT
+            rcount += 1
+          }
         } else {
-          node.direction = RIGHT
-          rcount += 1
+          if (node.direction === LEFT) {
+            lcount += 1
+          } else {
+            rcount += 1
+          }
         }
-      } else {
-        if (node.direction === LEFT) {
-          lcount += 1
-        } else {
-          rcount += 1
-        }
-      }
-    })
+      })
   }
   this.createChildren(this.nodeData.children, this.box, this.direction)
   console.timeEnd('layout')

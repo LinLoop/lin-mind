@@ -38,7 +38,7 @@ const mind = new MindElixir({
       return false
     },
     insertSibling(el, obj) {
-      console.log('insertSibling', el, obj)
+      // console.log('insertSibling', el, obj)
       return true
     },
     async addChild(el, obj) {
@@ -56,7 +56,7 @@ function sleep() {
     setTimeout(() => res(), 1000)
   })
 }
-console.log('test E function', E('bd4313fbac40284b'))
+// console.log('test E function', E('bd4313fbac40284b'))
 // let mind2 = new MindElixir({
 //   el: '#map2',
 //   direction: 2,
@@ -68,7 +68,7 @@ console.log('test E function', E('bd4313fbac40284b'))
 // mind2.init()
 window.currentOperation = null
 mind.bus.addListener('operation', operation => {
-  console.log(operation)
+  // console.log(operation)
   if (operation.name !== 'finishEdit') window.currentOperation = operation
   // return {
   //   name: action name,
@@ -81,9 +81,9 @@ mind.bus.addListener('operation', operation => {
   // name: moveNode
   // obj: {from:target1,to:target2}
 })
-mind.bus.addListener('selectNode', node => {
-  console.log(node)
-})
+// mind.bus.addListener('selectNode', node => {
+//   console.log(node)
+// })
 window.m = mind
 // window.m2 = mind2
 window.M = MindElixir

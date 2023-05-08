@@ -1,14 +1,27 @@
 import i18n from '../i18n'
-import { encodeHTML, isOutOfBoundary } from '../utils/index'
+import { encodeHTML, isOutOfBoundary, getBranchDepth, createToast } from '../utils/index'
 import './contextMenu.less'
 
-export default function(mind, option) {
+export default function (mind, option) {
   const createTips = words => {
     const div = document.createElement('div')
     div.innerText = words
     div.style.cssText = 'position:absolute;bottom:20px;left:50%;transform:translateX(-50%);'
     return div
   }
+
+  // const createToast = words => {
+  //   const div = document.createElement('div')
+  //   div.innerText = words
+  //   div.style.cssText =
+  //     'position:absolute;top:100px;left:50%;transform:translateX(-50%);background:black;color:#FFF;border-radius:3px;padding:5px 10px'
+  //   mind.container.appendChild(div)
+  //   const timer = setTimeout(() => {
+  //     mind.container.removeChild(div)
+  //     clearTimeout(timer)
+  //   }, 1500)
+  // }
+
   const createLi = (id, name, keyname, icon) => {
     const li = document.createElement('li')
     li.id = id
@@ -35,12 +48,7 @@ export default function(mind, option) {
   const add_child = createLi('cm-add_child', i18n[locale].addChild, 'tab', 'child')
   const add_parent = createLi('cm-add_parent', i18n[locale].addParent, '', 'parent')
   const add_sibling = createLi('cm-add_sibling', i18n[locale].addSibling, 'enter', 'sibling')
-  const remove_child = createLi(
-    'cm-remove_child',
-    i18n[locale].removeNode,
-    'delete',
-    'delete'
-  )
+  const remove_child = createLi('cm-remove_child', i18n[locale].removeNode, 'delete', 'delete')
   const up = createLi('cm-up', i18n[locale].moveUp, 'PgUp', 'moveup')
   const down = createLi('cm-down', i18n[locale].moveDown, 'Pgdn', 'movedown')
   const link = createLi('cm-link', i18n[locale].link, '', 'link')
@@ -92,7 +100,7 @@ export default function(mind, option) {
   mind.container.append(menuContainer)
   let isRoot = true
   // 鼠标右键点击事件的逻辑处理
-  mind.container.oncontextmenu = function(e) {
+  mind.container.oncontextmenu = function (e) {
     e.preventDefault()
     if (!mind.editable) return
     const target = e.target
@@ -162,21 +170,23 @@ export default function(mind, option) {
 
   add_child.onclick = e => {
     if (!mind.currentNode) return
-    const isOut = isOutOfBoundary(mind, 'addChild')
-    if (isOut) return
+    const depth = getBranchDepth(mind.currentNode.nodeObj)
+    const childLength = mind.currentNode.nodeObj.children?.length ?? 0
+
+    if (depth >= mind.maxChildNode && childLength <= 1) return createToast(i18n[locale].boundaryTips)
     mind.addChild()
     // menuContainer.hidden = true
   }
   add_parent.onclick = e => {
-    const isOut = isOutOfBoundary(mind, 'insertParent')
-    if (isOut) return
+    const depth = getBranchDepth(mind.currentNode.nodeObj)
+    if (depth >= mind.maxChildNode) return createToast(i18n[locale].boundaryTips)
     mind.insertParent()
     // menuContainer.hidden = true
   }
   add_sibling.onclick = e => {
     if (isRoot || !mind.currentNode) return
     const isOut = isOutOfBoundary(mind, 'insertSibling')
-    if (isOut) return
+    if (isOut) return createToast(i18n[locale].boundaryTips)
     mind.insertSibling()
     // menuContainer.hidden = true
   }
@@ -210,10 +220,7 @@ export default function(mind, option) {
       e => {
         e.preventDefault()
         tips.remove()
-        if (
-          e.target.parentElement.nodeName === 'T' ||
-          e.target.parentElement.nodeName === 'ROOT'
-        ) {
+        if (e.target.parentElement.nodeName === 'T' || e.target.parentElement.nodeName === 'ROOT') {
           mind.createLink(from, mind.currentNode)
           mind.bus.fire('operation', { name: 'linkNode', from: from.nodeObj, to: mind.currentNode.nodeObj }) // add to history
         } else {

@@ -1,11 +1,5 @@
 import { LEFT, RIGHT, SIDE } from './const'
-import {
-  isMobile,
-  addParentLink,
-  getObjById,
-  generateUUID,
-  generateNewObj,
-} from './utils/index'
+import { isMobile, addParentLink, getObjById, generateUUID, generateNewObj } from './utils/index'
 import { findEle, createInputDiv, layout, Topic, createChildren, createGroup, createTop, createTopic } from './utils/dom'
 import { createLinkSvg, createLine } from './utils/svg'
 import {
@@ -51,13 +45,7 @@ import {
   moveNodeBefore,
   moveNodeAfter,
 } from './nodeOperation'
-import {
-  createLink,
-  removeLink,
-  selectLink,
-  hideLinkController,
-  showLinkController,
-} from './customLink'
+import { createLink, removeLink, selectLink, hideLinkController, showLinkController } from './customLink'
 import linkDiv from './linkDiv'
 import initMouseEvent from './mouse'
 
@@ -90,30 +78,30 @@ type operation = {
   name: string
 }
 export interface NodeObj {
-  topic: string,
-  id: string,
+  topic: string
+  id: string
   style?: {
-    fontSize?: string,
-    color?: string,
-    background?: string,
+    fontSize?: string
+    color?: string
+    background?: string
     fontWeight?: string
-  },
-  parent?: NodeObj,
-  children?: NodeObj[],
-  tags?: string[],
-  icons?: string[],
-  hyperLink?: string,
-  expanded?: boolean,
-  direction?: number,
+  }
+  parent?: NodeObj
+  children?: NodeObj[]
+  tags?: string[]
+  icons?: string[]
+  hyperLink?: string
+  expanded?: boolean
+  direction?: number
   root?: boolean
 }
 
 export interface NodeElement extends HTMLElement {
-  nodeObj:Object
+  nodeObj: Object
 }
 export interface MindElixirData {
-  nodeData: NodeObj,
-  linkData?: LinkObj,
+  nodeData: NodeObj
+  linkData?: LinkObj
   direction?: number
 }
 export interface MindElixirInstance {
@@ -123,82 +111,84 @@ export interface MindElixirInstance {
   exitInstance: Object
   saveFn: Function
   saveInstance: Object
-  mindElixirBox: HTMLElement,
-  nodeData: NodeObj,
-  linkData: LinkObj,
+  mindElixirBox: HTMLElement
+  nodeData: NodeObj
+  linkData: LinkObj
   focusHistory: NodeObj[]
-  currentNode: Topic | null,
-  currentLink: SVGElement | null,
-  inputDiv: HTMLElement | null,
-  scaleVal: number,
-  tempDirection: number | null,
-  bus: object, // wip
+  currentNode: Topic | null
+  currentLink: SVGElement | null
+  inputDiv: HTMLElement | null
+  scaleVal: number
+  tempDirection: number | null
+  bus: object // wip
 
   // wip
-  history: operation[],
-  isUndo: boolean,
-  undo: () => void,
-  initMiniHook: (fn: Function, instance: Object) => void,
-  initSaveHook: (fn: Function, instance: Object) => void,
-  initExitHook: (fn: Function, instance: Object) => void,
+  history: operation[]
+  isUndo: boolean
+  undo: () => void
+  initMiniHook: (fn: Function, instance: Object) => void
+  initSaveHook: (fn: Function, instance: Object) => void
+  initExitHook: (fn: Function, instance: Object) => void
 
-  direction: number,
-  locale: string,
-  draggable: boolean,
-  editable: boolean,
-  contextMenu: boolean,
-  contextMenuOption: object,
-  toolBar: boolean,
-  nodeMenu: boolean,
-  keypress: boolean,
-  before: object,
-  newTopicName: string,
-  allowUndo: boolean,
-  allowMinimize: boolean,
-  allowSave: boolean,
-  allowExit: boolean,
-  overflowHidden: boolean,
-  primaryLinkStyle: number,
-  primaryNodeHorizontalGap: number,
-  primaryNodeVerticalGap: number,
-  mobileMenu: boolean,
-  upload: Function,
+  direction: number
+  locale: string
+  draggable: boolean
+  editable: boolean
+  contextMenu: boolean
+  contextMenuOption: object
+  toolBar: boolean
+  nodeMenu: boolean
+  keypress: boolean
+  before: object
+  newTopicName: string
+  allowUndo: boolean
+  allowMinimize: boolean
+  allowSave: boolean
+  allowExit: boolean
+  overflowHidden: boolean
+  primaryLinkStyle: number
+  primaryNodeHorizontalGap: number
+  primaryNodeVerticalGap: number
+  maxChildNode: number
+  mobileMenu: boolean
+  upload: Function
 
-  container: HTMLElement,
-  map: HTMLElement,
-  root: HTMLElement,
-  box: HTMLElement,
-  lines: SVGElement,
-  linkController:SVGElement,
-  P2: HTMLElement,
-  P3: HTMLElement,
-  line1:SVGElement,
-  line2:SVGElement,
-  linkSvgGroup:SVGElement,
+  container: HTMLElement
+  map: HTMLElement
+  root: HTMLElement
+  box: HTMLElement
+  lines: SVGElement
+  linkController: SVGElement
+  P2: HTMLElement
+  P3: HTMLElement
+  line1: SVGElement
+  line2: SVGElement
+  linkSvgGroup: SVGElement
 }
 export interface Options {
-  el: string | Element,
-  data: MindElixirData,
-  direction?: number,
-  locale?: string,
-  draggable?: boolean,
-  editable?: boolean,
-  contextMenu?: boolean,
-  contextMenuOption?: object,
-  toolBar?: boolean,
-  nodeMenu?: boolean,
-  keypress?: boolean,
-  before?: object,
-  newTopicName?: string,
-  allowUndo?: boolean,
-  allowMinimize?: boolean,
-  allowSave?: boolean,
-  allowExit?: boolean,
-  overflowHidden?: boolean,
-  primaryLinkStyle?: number,
-  primaryNodeHorizontalGap?: number,
-  primaryNodeVerticalGap?: number,
-  mobileMenu?: boolean,
+  el: string | Element
+  data: MindElixirData
+  direction?: number
+  locale?: string
+  draggable?: boolean
+  editable?: boolean
+  contextMenu?: boolean
+  contextMenuOption?: object
+  toolBar?: boolean
+  nodeMenu?: boolean
+  keypress?: boolean
+  before?: object
+  newTopicName?: string
+  allowUndo?: boolean
+  allowMinimize?: boolean
+  allowSave?: boolean
+  allowExit?: boolean
+  overflowHidden?: boolean
+  primaryLinkStyle?: number
+  primaryNodeHorizontalGap?: number
+  maxChildNode?: number
+  primaryNodeVerticalGap?: number
+  mobileMenu?: boolean
   upload?: Function
 }
 const $d = document
@@ -219,31 +209,35 @@ const $d = document
 mind.init()
  *
  */
-function MindElixir(this: MindElixirInstance, {
-  el,
-  direction,
-  locale,
-  draggable,
-  editable,
-  contextMenu,
-  contextMenuOption,
-  toolBar,
-  nodeMenu,
-  keypress,
-  before,
-  newTopicName,
-  allowUndo,
-  allowMinimize,
-  allowSave,
-  allowExit,
-  primaryLinkStyle,
-  overflowHidden,
-  primaryNodeHorizontalGap,
-  primaryNodeVerticalGap,
-  mobileMenu,
-  upload,
-}: Options) {
-  console.log('ME_version ' + MindElixir.version, this)
+function MindElixir(
+  this: MindElixirInstance,
+  {
+    el,
+    direction,
+    locale,
+    draggable,
+    editable,
+    contextMenu,
+    contextMenuOption,
+    toolBar,
+    nodeMenu,
+    keypress,
+    before,
+    newTopicName,
+    allowUndo,
+    allowMinimize,
+    allowSave,
+    allowExit,
+    primaryLinkStyle,
+    overflowHidden,
+    primaryNodeHorizontalGap,
+    primaryNodeVerticalGap,
+    maxChildNode,
+    mobileMenu,
+    upload,
+  }: Options
+) {
+  // console.log('ME_version ' + MindElixir.version, this)
   let box
   const elType = Object.prototype.toString.call(el)
   if (elType === '[object HTMLDivElement]') {
@@ -283,6 +277,7 @@ function MindElixir(this: MindElixirInstance, {
   this.primaryNodeHorizontalGap = primaryNodeHorizontalGap
   this.primaryNodeVerticalGap = primaryNodeVerticalGap
 
+  this.maxChildNode = maxChildNode || 10 // 最大子节点数
   this.focusHistory = []
 
   this.bus = new Bus()
@@ -291,9 +286,22 @@ function MindElixir(this: MindElixirInstance, {
       this.isUndo = false
       // return
     }
-    if (['moveNode', 'removeNode', 'addChild', 'insertParent', 'insertSibling', 'moveUpNode', 'moveDownNode', 'linkNode', 'finishEdit', 'editStyle', 'editTags', 'editIcons'].includes(
-      operation.name
-    )) {
+    if (
+      [
+        'moveNode',
+        'removeNode',
+        'addChild',
+        'insertParent',
+        'insertSibling',
+        'moveUpNode',
+        'moveDownNode',
+        'linkNode',
+        'finishEdit',
+        'editStyle',
+        'editTags',
+        'editIcons',
+      ].includes(operation.name)
+    ) {
       this.history.push(operation)
     }
   })
@@ -301,7 +309,7 @@ function MindElixir(this: MindElixirInstance, {
   this.history = [] // TODO
   this.isUndo = false
 
-  this.initMiniHook = function(Fn, instance) {
+  this.initMiniHook = function (Fn, instance) {
     this.miniFn = Fn
     this.miniInstance = instance
   }
@@ -316,17 +324,13 @@ function MindElixir(this: MindElixirInstance, {
     this.exitInstance = instance
   }
 
-  this.undo = function() {
+  this.undo = function () {
     const operation = this.history.pop()
     if (!operation) return
 
     this.isUndo = true
     if (operation.name === 'moveNode') {
-      this.moveNode(
-        E(operation.obj.fromObj.id),
-        E(operation.obj.originParentId),
-        false
-      )
+      this.moveNode(E(operation.obj.fromObj.id), E(operation.obj.originParentId), false)
     } else if (operation.name === 'removeNode') {
       if (operation.originSiblingId) {
         this.insertBefore(E(operation.originSiblingId), operation.obj, false)
@@ -346,7 +350,9 @@ function MindElixir(this: MindElixirInstance, {
       let linkSvg
       const linkSvgId = Object.keys(this.linkData).pop()
       const g = document.querySelectorAll('.topiclinks g')
-      g.forEach(el => { if (el.getAttribute('data-linkid') === linkSvgId) linkSvg = el })
+      g.forEach(el => {
+        if (el.getAttribute('data-linkid') === linkSvgId) linkSvg = el
+      })
       if (linkSvg) this.removeLink(linkSvg)
     } else if (operation.name === 'editStyle') {
       operation.origin.fontSize = operation.origin.fontSize.replace(/px/g, '')
@@ -407,12 +413,9 @@ function MindElixir(this: MindElixirInstance, {
   } else initMouseEvent(this)
 }
 
-function beforeHook(fn:(el:any, node?:any)=>void, fnName:string) {
-  return async function(...args:unknown[]) {
-    if (
-      !this.before[fnName] ||
-      (await this.before[fnName].apply(this, args))
-    ) {
+function beforeHook(fn: (el: any, node?: any) => void, fnName: string) {
+  return async function (...args: unknown[]) {
+    if (!this.before[fnName] || (await this.before[fnName].apply(this, args))) {
       fn.apply(this, args)
     }
   }
@@ -452,7 +455,10 @@ MindElixir.prototype = {
   linkDiv,
   createInputDiv,
 
-  createChildren, createGroup, createTop, createTopic,
+  createChildren,
+  createGroup,
+  createTop,
+  createTopic,
 
   selectNode,
   unselectNode,
@@ -478,7 +484,7 @@ MindElixir.prototype = {
   install(plugin) {
     plugin(this)
   },
-  init(data:MindElixirData) {
+  init(data: MindElixirData) {
     if (!data || !data.nodeData) return new Error('MindElixir: `data` is required')
     if (data.direction) {
       this.direction = data.direction

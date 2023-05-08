@@ -23,7 +23,7 @@ const $d = document
  * @exports NodeOperation
  * @namespace NodeOperation
  */
-export const updateNodeStyle = function(object, history = true) {
+export const updateNodeStyle = function (object, history = true) {
   if (!object.style) return
   const nodeEle = findEle(object.id, this)
   const origin = {
@@ -47,7 +47,7 @@ export const updateNodeStyle = function(object, history = true) {
   })
 }
 
-export const updateNodeTags = function(object, tags, history = true) {
+export const updateNodeTags = function (object, tags, history = true) {
   const oldVal = object.tags
   object.tags = tags
   const nodeEle = findEle(object.id)
@@ -61,7 +61,7 @@ export const updateNodeTags = function(object, tags, history = true) {
   })
 }
 
-export const updateNodeIcons = function(object, icons, history = true) {
+export const updateNodeIcons = function (object, icons, history = true) {
   const oldVal = object.icons
   object.icons = icons
   const nodeEle = findEle(object.id)
@@ -75,7 +75,7 @@ export const updateNodeIcons = function(object, icons, history = true) {
   })
 }
 
-export const updateNodeHyperLink = function(object, hyperLink) {
+export const updateNodeHyperLink = function (object, hyperLink) {
   const oldVal = object.hyperLink
   object.hyperLink = hyperLink
   const nodeEle = findEle(object.id)
@@ -88,7 +88,7 @@ export const updateNodeHyperLink = function(object, hyperLink) {
   })
 }
 
-export const updateNodeSvgChart = function() {
+export const updateNodeSvgChart = function () {
   // TODO
 }
 
@@ -103,7 +103,7 @@ export const updateNodeSvgChart = function() {
  * @example
  * insertSibling(E('bd4313fbac40284b'))
  */
-export const insertSibling = function(el, node) {
+export const insertSibling = function (el, node) {
   const nodeEle = el || this.currentNode
   if (!nodeEle) return
   const nodeObj = nodeEle.nodeObj
@@ -115,7 +115,7 @@ export const insertSibling = function(el, node) {
   insertNodeObj(nodeObj, newNodeObj)
   addParentLink(this.nodeData)
   const t = nodeEle.parentElement
-  console.time('insertSibling_DOM')
+  // console.time('insertSibling_DOM')
 
   const { grp, top } = this.createGroup(newNodeObj)
 
@@ -131,7 +131,7 @@ export const insertSibling = function(el, node) {
     this.createInputDiv(top.children[0])
   }
   this.selectNode(top.children[0], true)
-  console.timeEnd('insertSibling_DOM')
+  // console.timeEnd('insertSibling_DOM')
   this.bus.fire('operation', {
     name: 'insertSibling',
     obj: newNodeObj,
@@ -149,7 +149,7 @@ export const insertSibling = function(el, node) {
  * @example
  * insertBefore(E('bd4313fbac40284b'))
  */
-export const insertBefore = function(el, node, history = true) {
+export const insertBefore = function (el, node, history = true) {
   const nodeEle = el || this.currentNode
   if (!nodeEle) return
   const nodeObj = nodeEle.nodeObj
@@ -161,7 +161,7 @@ export const insertBefore = function(el, node, history = true) {
   insertBeforeNodeObj(nodeObj, newNodeObj)
   addParentLink(this.nodeData)
   const t = nodeEle.parentElement
-  console.time('insertSibling_DOM')
+  // console.time('insertSibling_DOM')
 
   const { grp, top } = this.createGroup(newNodeObj)
 
@@ -177,7 +177,7 @@ export const insertBefore = function(el, node, history = true) {
     this.createInputDiv(top.children[0])
   }
   this.selectNode(top.children[0], true)
-  console.timeEnd('insertSibling_DOM')
+  // console.timeEnd('insertSibling_DOM')
   if (!history) return
   this.bus.fire('operation', {
     name: 'insertSibling',
@@ -196,7 +196,7 @@ export const insertBefore = function(el, node, history = true) {
  * @example
  * insertParent(E('bd4313fbac40284b'))
  */
-export const insertParent = function(el, node) {
+export const insertParent = function (el, node) {
   const nodeEle = el || this.currentNode
   if (!nodeEle) return
   const nodeObj = nodeEle.nodeObj
@@ -238,7 +238,7 @@ export const insertParent = function(el, node) {
   })
 }
 
-export const addChildFunction = function(nodeEle, node) {
+export const addChildFunction = function (nodeEle, node) {
   if (!nodeEle) return
   const nodeObj = nodeEle.nodeObj
   if (nodeObj.expanded === false) {
@@ -285,7 +285,7 @@ export const addChildFunction = function(nodeEle, node) {
  * @example
  * addChild(E('bd4313fbac40284b'))
  */
-export const addChild = function(el: NodeElement, node: NodeObj, history = true) {
+export const addChild = function (el: NodeElement, node: NodeObj, history = true) {
   // console.time('addChild')
   const nodeEle = el || this.currentNode
   if (!nodeEle) return
@@ -313,7 +313,7 @@ export const addChild = function(el: NodeElement, node: NodeObj, history = true)
  * @example
  * copyNode(E('bd4313fbac402842'),E('bd4313fbac402839'))
  */
-export const copyNode = function(node: NodeElement, to: NodeElement) {
+export const copyNode = function (node: NodeElement, to: NodeElement) {
   console.time('copyNode')
   const deepCloneObj = JSON.parse(
     JSON.stringify(node.nodeObj, (k, v) => {
@@ -341,7 +341,7 @@ export const copyNode = function(node: NodeElement, to: NodeElement) {
  * @example
  * moveUpNode(E('bd4313fbac40284b'))
  */
-export const moveUpNode = function(el, history = true) {
+export const moveUpNode = function (el, history = true) {
   const nodeEle = el || this.currentNode
   if (!nodeEle) return
   const grp = nodeEle.parentNode.parentNode
@@ -379,7 +379,7 @@ export const moveUpNode = function(el, history = true) {
  * @example
  * moveDownNode(E('bd4313fbac40284b'))
  */
-export const moveDownNode = function(el, history = true) {
+export const moveDownNode = function (el, history = true) {
   const nodeEle = el || this.currentNode
   if (!nodeEle) return
   const grp = nodeEle.parentNode.parentNode
@@ -408,7 +408,7 @@ export const moveDownNode = function(el, history = true) {
  * @example
  * removeNode(E('bd4313fbac40284b'))
  */
-export const removeNode = function(el, history = true) {
+export const removeNode = function (el, history = true) {
   const nodeEle = el || this.currentNode
   if (!nodeEle) return
   const nodeObj = nodeEle.nodeObj
@@ -467,7 +467,7 @@ export const removeNode = function(el, history = true) {
  * @example
  * moveNode(E('bd4313fbac402842'),E('bd4313fbac402839'))
  */
-export const moveNode = function(from, to, history = true) {
+export const moveNode = function (from, to, history = true) {
   const fromObj = from.nodeObj
   const toObj = to.nodeObj
   const originParentId = fromObj.parent.id
@@ -531,13 +531,12 @@ export const moveNode = function(from, to, history = true) {
  * @example
  * moveNodeBefore(E('bd4313fbac402842'),E('bd4313fbac402839'))
  */
-export const moveNodeBefore = function(from, to, history = true) {
+export const moveNodeBefore = function (from, to, history = true) {
   const fromObj = from?.nodeObj
   const toObj = to.nodeObj
   const originParentId = fromObj.parent.id
   moveNodeBeforeObj(fromObj, toObj)
   addParentLink(this.nodeData)
-  console.log(fromObj, toObj, 'moveNodeBefore')
 
   const fromTop = from.parentElement
   const fromGrp = fromTop.parentNode
@@ -565,7 +564,7 @@ export const moveNodeBefore = function(from, to, history = true) {
  * @example
  * moveNodeAfter(E('bd4313fbac402842'),E('bd4313fbac402839'))
  */
-export const moveNodeAfter = function(from, to) {
+export const moveNodeAfter = function (from, to) {
   const fromObj = from.nodeObj
   const toObj = to.nodeObj
   const originParentId = fromObj.parent.id
@@ -595,13 +594,13 @@ export const moveNodeAfter = function(from, to) {
  * @example
  * beginEdit(E('bd4313fbac40284b'))
  */
-export const beginEdit = function(el) {
+export const beginEdit = function (el) {
   const nodeEle = el || this.currentNode
   if (!nodeEle) return
   this.createInputDiv(nodeEle)
 }
 
-export const setNodeTopic = function(tpc, topic) {
+export const setNodeTopic = function (tpc, topic) {
   tpc.childNodes[0].textContent = topic
   tpc.nodeObj.topic = topic
   this.linkDiv()
