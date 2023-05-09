@@ -46,8 +46,13 @@ export default function (mind) {
 
   const locale = i18n[mind.locale] ? mind.locale : 'en'
   mind.map.addEventListener('dragstart', function (e) {
+    // 设置拖拽操作的允许效果为"move"
+    e.dataTransfer.effectAllowed = 'move'
+    // 添加CSS类以改变元素的样式
     dragged = e.target
+    // dragged.parentElement.parentElement.classList.add('dragging')
     ;(dragged.parentNode.parentNode as Group).style.opacity = '0.5'
+    // ;(dragged.parentNode.parentNode as Group).style.cursor = 'move'
     dragMoveHelper.clear()
   })
 
@@ -56,14 +61,16 @@ export default function (mind) {
     clearPreview(meet)
 
     // 超出范围提示
-    const dragDepth = getNodeChildDepth(dragged.nodeObj)
-    const meetId = meet.getAttribute('data-nodeid').replace('me', '')
-    const meetNodeObj = findEle(meetId)
-    const meetDepth = getNodeDepth(meetNodeObj.nodeObj)
-    if (dragDepth + meetDepth > mind.maxChildNode) {
-      ;(dragged.parentNode.parentNode as Group).style.opacity = '1'
-      dragged = null
-      return createToast(i18n[locale].boundaryTips)
+    if (meet) {
+      const dragDepth = getNodeChildDepth(dragged.nodeObj)
+      const meetId = meet.getAttribute('data-nodeid').replace('me', '')
+      const meetNodeObj = findEle(meetId)
+      const meetDepth = getNodeDepth(meetNodeObj.nodeObj)
+      if (dragDepth + meetDepth > mind.maxChildNode) {
+        ;(dragged.parentNode.parentNode as Group).style.opacity = '1'
+        dragged = null
+        return createToast(i18n[locale].boundaryTips)
+      }
     }
 
     const obj = dragged.nodeObj
@@ -87,7 +94,10 @@ export default function (mind) {
   mind.map.addEventListener(
     'dragover',
     throttle(function (e: DragEvent) {
-      // console.log('drag', e)
+      // 设置拖拽操作的允许效果为"move"
+      e.preventDefault()
+      e.dataTransfer.effectAllowed = 'move'
+
       clearPreview(meet)
       // minus threshold infer that postion of the cursor is above topic
       const topMeet = $d.elementFromPoint(e.clientX, e.clientY - threshold)
@@ -114,6 +124,6 @@ export default function (mind) {
         }
       }
       if (meet) insertPreview(meet, insertLocation)
-    }, 200)
+    }, 0)
   )
 }

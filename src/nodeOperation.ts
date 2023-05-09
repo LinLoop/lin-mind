@@ -441,7 +441,8 @@ export const removeNode = function (el, history = true) {
     // MAYBEBUG should traversal all children node
     const link = this.linkData[prop]
     if (link.from === t.firstChild || link.to === t.firstChild) {
-      this.removeLink(this.mindElixirBox.querySelector(`[data-linkid=${this.linkData[prop].id}]`))
+      // 修复连接线删除不了bug
+      this.removeLink(this.mindElixirBox.querySelector(`[data-linkid='${this.linkData[prop].id}']`))
     }
   }
   // remove GRP

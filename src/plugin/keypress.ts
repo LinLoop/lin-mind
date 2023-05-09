@@ -3,6 +3,27 @@ import i18n from '../i18n'
 
 export default function (mind) {
   const locale = i18n[mind.locale] ? mind.locale : 'en'
+  //  重置nodeMenu
+  const clearSelect = (klass, remove) => {
+    var elems = mind.container.querySelectorAll(klass)
+    ;[].forEach.call(elems, function (el) {
+      el.classList.remove(remove)
+    })
+  }
+
+  const resetNodeMenu = () => {
+    const nemnu = mind.container.querySelector('nmenu')
+    if (!nemnu) return
+    clearSelect('.palette', 'nmenu-selected')
+    clearSelect('.size', 'size-selected')
+    clearSelect('.bold', 'size-selected')
+    const inputs: NodeListOf<HTMLInputElement> = mind.container.querySelectorAll('nmenu input')
+    const textarea: HTMLTextAreaElement = mind.container.querySelector('nmenu textarea')
+    for (let i = 0; i < inputs.length; i++) {
+      inputs[i].value = ''
+    }
+    textarea.value = ''
+  }
   const key2func = {
     13: () => {
       // enter
@@ -10,6 +31,7 @@ export default function (mind) {
       const isOut = isOutOfBoundary(mind, 'insertSibling')
       if (isOut) return createToast(i18n[locale].boundaryTips)
       mind.insertSibling()
+      resetNodeMenu()
     },
     9: () => {
       // tab
@@ -18,6 +40,7 @@ export default function (mind) {
       const childLength = mind.currentNode.nodeObj.children?.length ?? 0
       if (depth >= mind.maxChildNode && childLength <= 1) return createToast(i18n[locale].boundaryTips)
       mind.addChild()
+      resetNodeMenu()
     },
     113: () => {
       // f2
@@ -91,7 +114,7 @@ export default function (mind) {
     // ctrl -
     189: e => {
       if (e.metaKey || e.ctrlKey) {
-        if (mind.scaleVal < 0.6) return
+        if (mind.scaleVal < 0.4) return
         mind.scale((mind.scaleVal -= 0.2))
       }
     },

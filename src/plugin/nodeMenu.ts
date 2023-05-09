@@ -1,6 +1,6 @@
 import './nodeMenu.less'
 import i18n from '../i18n'
-import { E } from '../index'
+// import { E } from '../index'
 
 const createDiv = (id, innerHTML) => {
   const div = document.createElement('div')
@@ -30,40 +30,43 @@ const colorList = [
   '#2ecc71',
 ]
 
-export default function(mind) {
+export default function (mind) {
   function clearSelect(klass, remove) {
     var elems = mind.container.querySelectorAll(klass)
-    ;[].forEach.call(elems, function(el) {
+    ;[].forEach.call(elems, function (el) {
       el.classList.remove(remove)
     })
   }
 
   // create element
   const locale = i18n[mind.locale] ? mind.locale : 'en'
-  const styleDiv = createDiv('nm-style', `
+  const styleDiv = createDiv(
+    'nm-style',
+    `
   <div class="nm-fontsize-container">
     ${['15', '24', '32', '64']
-    .map(size => {
-      return `<div class="size"  data-size="${size}">
+      .map(size => {
+        return `<div class="size"  data-size="${size}">
     <svg class="icon" style="width: ${size}px;height: ${size}px" aria-hidden="true">
       <use xlink:href="#icon-a"></use>
     </svg></div>`
-    })
-    .join('')}<div class="bold"><svg class="icon" aria-hidden="true">
+      })
+      .join('')}<div class="bold"><svg class="icon" aria-hidden="true">
 <use xlink:href="#icon-B"></use>
 </svg></div>
   </div>
   <div class="nm-fontcolor-container">
     ${colorList
-    .map(color => {
-      return `<div class="split6"><div class="palette" data-color="${color}" style="background-color: ${color};"></div></div>`
-    })
-    .join('')}
+      .map(color => {
+        return `<div class="split6"><div class="palette" data-color="${color}" style="background-color: ${color};"></div></div>`
+      })
+      .join('')}
   </div>
   <div class="bof">
   <span class="font">${i18n[locale].font}</span>
   <span class="background">${i18n[locale].background}</span>
-  </div>`)
+  </div>`
+  )
   const tagDiv = createDiv('nm-tag', `${i18n[locale].tag}<input class="nm-tag" tabindex="-1" placeholder="${i18n[locale].tagsSeparate}" />`)
   const iconDiv = createDiv('nm-icon', `${i18n[locale].icon}<input class="nm-icon" tabindex="-1" placeholder="${i18n[locale].iconsSeparate}" />`)
   // const urlDiv = createDiv('nm-url', `${i18n[locale].url}<input class="nm-url" tabindex="-1" />`)
@@ -86,13 +89,13 @@ export default function(mind) {
 
   // query input element
   const sizeSelector = menuContainer.querySelectorAll('.size')
-  const bold:HTMLElement = menuContainer.querySelector('.bold')
-  const buttonContainer:HTMLElement = menuContainer.querySelector('.button-container')
-  const fontBtn:HTMLElement = menuContainer.querySelector('.font')
-  const tagInput:HTMLInputElement = mind.container.querySelector('.nm-tag')
-  const iconInput:HTMLInputElement = mind.container.querySelector('.nm-icon')
+  const bold: HTMLElement = menuContainer.querySelector('.bold')
+  const buttonContainer: HTMLElement = menuContainer.querySelector('.button-container')
+  const fontBtn: HTMLElement = menuContainer.querySelector('.font')
+  const tagInput: HTMLInputElement = mind.container.querySelector('.nm-tag')
+  const iconInput: HTMLInputElement = mind.container.querySelector('.nm-icon')
   // const urlInput:HTMLInputElement = mind.container.querySelector('.nm-url')
-  const memoInput:HTMLInputElement = mind.container.querySelector('.nm-memo')
+  const memoInput: HTMLInputElement = mind.container.querySelector('.nm-memo')
 
   // handle input and button click
   let bgOrFont
@@ -116,9 +119,7 @@ export default function(mind) {
       target.className = 'background selected'
       target.previousElementSibling.className = 'font'
       if (nodeObj.style && nodeObj.style.background) {
-        menuContainer.querySelector(
-          '.palette[data-color="' + nodeObj.style.background + '"]'
-        ).className = 'palette nmenu-selected'
+        menuContainer.querySelector('.palette[data-color="' + nodeObj.style.background + '"]').className = 'palette nmenu-selected'
       }
     } else if (target.className === 'font') {
       clearSelect('.palette', 'nmenu-selected')
@@ -126,25 +127,21 @@ export default function(mind) {
       target.className = 'font selected'
       target.nextElementSibling.className = 'background'
       if (nodeObj.style && nodeObj.style.color) {
-        menuContainer.querySelector(
-          '.palette[data-color="' + nodeObj.style.color + '"]'
-        ).className = 'palette nmenu-selected'
+        menuContainer.querySelector('.palette[data-color="' + nodeObj.style.color + '"]').className = 'palette nmenu-selected'
       }
     }
   }
-  Array.from(sizeSelector).map(
-    dom => {
-      (dom as HTMLElement).onclick = e => {
-        if (!mind.currentNode.nodeObj.style) mind.currentNode.nodeObj.style = {}
-        clearSelect('.size', 'size-selected')
-        const size = e.currentTarget as HTMLElement
-        mind.currentNode.nodeObj.style.fontSize = size.dataset.size
-        size.className = 'size size-selected'
-        mind.updateNodeStyle(mind.currentNode.nodeObj)
-      }
+  Array.from(sizeSelector).map(dom => {
+    ;(dom as HTMLElement).onclick = e => {
+      if (!mind.currentNode.nodeObj.style) mind.currentNode.nodeObj.style = {}
+      clearSelect('.size', 'size-selected')
+      const size = e.currentTarget as HTMLElement
+      mind.currentNode.nodeObj.style.fontSize = size.dataset.size
+      size.className = 'size size-selected'
+      mind.updateNodeStyle(mind.currentNode.nodeObj)
     }
-  )
-  bold.onclick = (e:MouseEvent & { currentTarget: Element}) => {
+  })
+  bold.onclick = (e: MouseEvent & { currentTarget: Element }) => {
     if (!mind.currentNode.nodeObj.style) mind.currentNode.nodeObj.style = {}
     if (mind.currentNode.nodeObj.style.fontWeight === 'bold') {
       delete mind.currentNode.nodeObj.style.fontWeight
@@ -156,25 +153,31 @@ export default function(mind) {
       mind.updateNodeStyle(mind.currentNode.nodeObj)
     }
   }
-  tagInput.onchange = (e:InputEvent & { target: HTMLInputElement}) => {
+  tagInput.onchange = (e: InputEvent & { target: HTMLInputElement }) => {
     if (!mind.currentNode) return
     if (typeof e.target.value === 'string') {
       const newTags = e.target.value.split(',')
-      mind.updateNodeTags(mind.currentNode.nodeObj, newTags.filter(tag => tag))
+      mind.updateNodeTags(
+        mind.currentNode.nodeObj,
+        newTags.filter(tag => tag)
+      )
     }
   }
-  iconInput.onchange = (e:InputEvent & { target: HTMLInputElement}) => {
+  iconInput.onchange = (e: InputEvent & { target: HTMLInputElement }) => {
     if (!mind.currentNode) return
     if (typeof e.target.value === 'string') {
       const newIcons = e.target.value.split(',')
-      mind.updateNodeIcons(mind.currentNode.nodeObj, newIcons.filter(icon => icon))
+      mind.updateNodeIcons(
+        mind.currentNode.nodeObj,
+        newIcons.filter(icon => icon)
+      )
     }
   }
   // urlInput.onchange = (e:InputEvent & { target: HTMLInputElement}) => {
   //   if (!mind.currentNode) return
   //   mind.updateNodeHyperLink(mind.currentNode.nodeObj, e.target.value)
   // }
-  memoInput.onchange = (e:InputEvent & { target: HTMLInputElement}) => {
+  memoInput.onchange = (e: InputEvent & { target: HTMLInputElement }) => {
     if (!mind.currentNode) return
     mind.currentNode.nodeObj.memo = e.target.value
   }
@@ -192,7 +195,7 @@ export default function(mind) {
   }
 
   // handle node selection
-  mind.bus.addListener('unselectNode', function() {
+  mind.bus.addListener('unselectNode', function () {
     const currentImg = document.getElementById('currentImg')
     if (currentImg) {
       currentImg.setAttribute('id', '')
@@ -202,7 +205,7 @@ export default function(mind) {
     // 将固定菜单恢复为禁止状态
     const cmenu = document.getElementsByClassName('menu-list')
     for (let i = 0; i < cmenu[0]?.children.length; i++) {
-      cmenu[0].children[i].className = (i < 4) || (cmenu[0].children[i].id === 'cm-goback' && mind.history.length) ? '' : 'disabled'
+      cmenu[0].children[i].className = i < 4 || (cmenu[0].children[i].id === 'cm-goback' && mind.history.length) ? '' : 'disabled'
     }
     if (mind.toolBar) {
       document.getElementById('focus').className = 'disabled'
@@ -210,7 +213,7 @@ export default function(mind) {
     }
   })
   // 鼠标左键点击事件的逻辑处理--node节点
-  mind.bus.addListener('selectNode', function(nodeObj, clickEvent) {
+  mind.bus.addListener('selectNode', function (nodeObj, clickEvent) {
     if (!clickEvent) return
     const currentImg = document.getElementById('currentImg')
     if (currentImg) {
@@ -246,15 +249,13 @@ export default function(mind) {
     fontBtn.nextElementSibling.className = 'background'
     if (nodeObj.style) {
       if (nodeObj.style.fontSize) {
-        menuContainer.querySelector(
-          '.size[data-size="' + nodeObj.style.fontSize + '"]'
-        ).className = 'size size-selected'
+        menuContainer.querySelector('.size[data-size="' + nodeObj.style.fontSize + '"]').className = 'size size-selected'
       }
-      if (nodeObj.style.fontWeight) { menuContainer.querySelector('.bold').className = 'bold size-selected' }
+      if (nodeObj.style.fontWeight) {
+        menuContainer.querySelector('.bold').className = 'bold size-selected'
+      }
       if (nodeObj.style.color) {
-        menuContainer.querySelector(
-          '.palette[data-color="' + nodeObj.style.color + '"]'
-        ).className = 'palette nmenu-selected'
+        menuContainer.querySelector('.palette[data-color="' + nodeObj.style.color + '"]').className = 'palette nmenu-selected'
       }
     }
     if (nodeObj.tags) {
@@ -271,7 +272,7 @@ export default function(mind) {
     memoInput.value = nodeObj.memo || ''
   })
   // 处理图片点击
-  mind.map.addEventListener('click', function(e) {
+  mind.map.addEventListener('click', function (e) {
     if (e.target.tagName === 'IMG') {
       const ele = e.target
       ele.setAttribute('id', 'currentImg')

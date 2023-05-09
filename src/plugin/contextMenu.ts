@@ -3,24 +3,34 @@ import { encodeHTML, isOutOfBoundary, getBranchDepth, createToast } from '../uti
 import './contextMenu.less'
 
 export default function (mind, option) {
+  //  重置nodeMenu
+  const clearSelect = (klass, remove) => {
+    var elems = mind.container.querySelectorAll(klass)
+    ;[].forEach.call(elems, function (el) {
+      el.classList.remove(remove)
+    })
+  }
+
+  const resetNodeMenu = () => {
+    const nemnu = mind.container.querySelector('nmenu')
+    if (!nemnu) return
+    clearSelect('.palette', 'nmenu-selected')
+    clearSelect('.size', 'size-selected')
+    clearSelect('.bold', 'size-selected')
+    const inputs: NodeListOf<HTMLInputElement> = mind.container.querySelectorAll('nmenu input')
+    const textarea: HTMLTextAreaElement = mind.container.querySelector('nmenu textarea')
+    for (let i = 0; i < inputs.length; i++) {
+      inputs[i].value = ''
+    }
+    textarea.value = ''
+  }
+
   const createTips = words => {
     const div = document.createElement('div')
     div.innerText = words
     div.style.cssText = 'position:absolute;bottom:20px;left:50%;transform:translateX(-50%);'
     return div
   }
-
-  // const createToast = words => {
-  //   const div = document.createElement('div')
-  //   div.innerText = words
-  //   div.style.cssText =
-  //     'position:absolute;top:100px;left:50%;transform:translateX(-50%);background:black;color:#FFF;border-radius:3px;padding:5px 10px'
-  //   mind.container.appendChild(div)
-  //   const timer = setTimeout(() => {
-  //     mind.container.removeChild(div)
-  //     clearTimeout(timer)
-  //   }, 1500)
-  // }
 
   const createLi = (id, name, keyname, icon) => {
     const li = document.createElement('li')
@@ -175,12 +185,14 @@ export default function (mind, option) {
 
     if (depth >= mind.maxChildNode && childLength <= 1) return createToast(i18n[locale].boundaryTips)
     mind.addChild()
+    resetNodeMenu()
     // menuContainer.hidden = true
   }
   add_parent.onclick = e => {
     const depth = getBranchDepth(mind.currentNode.nodeObj)
     if (depth >= mind.maxChildNode) return createToast(i18n[locale].boundaryTips)
     mind.insertParent()
+    resetNodeMenu()
     // menuContainer.hidden = true
   }
   add_sibling.onclick = e => {
@@ -188,6 +200,7 @@ export default function (mind, option) {
     const isOut = isOutOfBoundary(mind, 'insertSibling')
     if (isOut) return createToast(i18n[locale].boundaryTips)
     mind.insertSibling()
+    resetNodeMenu()
     // menuContainer.hidden = true
   }
   remove_child.onclick = e => {

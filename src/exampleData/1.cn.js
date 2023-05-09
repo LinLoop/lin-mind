@@ -4,77 +4,77 @@ export default {
     topic: 'Mind Elixir',
     root: true,
     children: [
-      {
-        topic: '什么是 Minde Elixir',
-        id: 'bd4313fbac40284b',
-        direction: 0,
-        expanded: true,
-        children: [
-          {
-            topic: '一个思维导图内核',
-            id: 'beeb823afd6d2114',
-          },
-          {
-            topic: '免费',
-            id: 'c1f068377de9f3a0',
-          },
-          {
-            topic: '即将开源',
-            id: 'c1f06d38a09f23ca',
-          },
-          {
-            topic: '无框架依赖',
-            id: 'c1f06e4cbcf16463',
-            expanded: true,
-            children: [],
-          },
-          {
-            topic: '两步轻松接入已有项目',
-            id: 'c1f1f11a7fbf7550',
-            children: [
-              {
-                topic: "import MindElixir from 'mind-elixir'",
-                id: 'c1f1e245b0a89f9b',
-              },
-              {
-                topic: 'new MindElixir({...}).init(data)',
-                id: 'c1f1ebc7072c8928',
-              },
-            ],
-          },
-          {
-            topic: '使用简单',
-            id: 'c1f0723c07b408d7',
-            expanded: true,
-            children: [
-              {
-                topic: '操作手感类似其他主流思维导图应用',
-                id: 'c1f09612fd89920d',
-              },
-            ],
-          },
-        ],
-      },
-      {
-        topic: '基本操作',
-        id: 'bd1b66c4b56754d9',
-        direction: 0,
-        expanded: true,
-        children: [
-          {
-            topic: 'tab 新建子节点',
-            id: 'bd1b6892bcab126a',
-          },
-          {
-            topic: 'enter 新建同级节点',
-            id: 'bd1b6b632a434b27',
-          },
-          {
-            topic: 'del 删除节点',
-            id: 'bd1b983085187c0a',
-          },
-        ],
-      },
+      // {
+      //   topic: '什么是 Minde Elixir',
+      //   id: 'bd4313fbac40284b',
+      //   direction: 0,
+      //   expanded: true,
+      //   children: [
+      //     {
+      //       topic: '一个思维导图内核',
+      //       id: 'beeb823afd6d2114',
+      //     },
+      //     {
+      //       topic: '免费',
+      //       id: 'c1f068377de9f3a0',
+      //     },
+      //     {
+      //       topic: '即将开源',
+      //       id: 'c1f06d38a09f23ca',
+      //     },
+      //     {
+      //       topic: '无框架依赖',
+      //       id: 'c1f06e4cbcf16463',
+      //       expanded: true,
+      //       children: [],
+      //     },
+      //     {
+      //       topic: '两步轻松接入已有项目',
+      //       id: 'c1f1f11a7fbf7550',
+      //       children: [
+      //         {
+      //           topic: "import MindElixir from 'mind-elixir'",
+      //           id: 'c1f1e245b0a89f9b',
+      //         },
+      //         {
+      //           topic: 'new MindElixir({...}).init(data)',
+      //           id: 'c1f1ebc7072c8928',
+      //         },
+      //       ],
+      //     },
+      //     {
+      //       topic: '使用简单',
+      //       id: 'c1f0723c07b408d7',
+      //       expanded: true,
+      //       children: [
+      //         {
+      //           topic: '操作手感类似其他主流思维导图应用',
+      //           id: 'c1f09612fd89920d',
+      //         },
+      //       ],
+      //     },
+      //   ],
+      // },
+      // {
+      //   topic: '基本操作',
+      //   id: 'bd1b66c4b56754d9',
+      //   direction: 0,
+      //   expanded: true,
+      //   children: [
+      //     {
+      //       topic: 'tab 新建子节点',
+      //       id: 'bd1b6892bcab126a',
+      //     },
+      //     {
+      //       topic: 'enter 新建同级节点',
+      //       id: 'bd1b6b632a434b27',
+      //     },
+      //     {
+      //       topic: 'del 删除节点',
+      //       id: 'bd1b983085187c0a',
+      //     },
+      //   ],
+      // },
       // {
       //   topic: '专注',
       //   id: 'bd1b9b94a9a7a913',

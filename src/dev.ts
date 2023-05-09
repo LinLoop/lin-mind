@@ -29,21 +29,21 @@ const options = {
     focus: true,
     link: true,
     extend: [
-      // {
-      //   name: '所在层数',
-      //   onclick: async() => {
-      //     console.log(mind.currentNode.nodeObj)
-      //   },
-      // },
+      {
+        name: '导出',
+        onclick: async () => {
+          exportPng(mind, 'sss')
+        },
+      },
     ],
   },
   toolBar: true,
   nodeMenu: true,
   keypress: true,
-  allowUndo: true,
-  allowSave: true,
-  allowMinimize: true,
-  allowExit: true,
+  allowUndo: false,
+  allowSave: false,
+  allowMinimize: false,
+  allowExit: false,
   before: {
     // moveDownNode() {
     //   return false
@@ -58,7 +58,7 @@ const options = {
       return true
     },
   },
-  primaryLinkStyle: 1,
+  primaryLinkStyle: 2,
   primaryNodeVerticalGap: 25, // 25
   primaryNodeHorizontalGap: 65, // 65
 }

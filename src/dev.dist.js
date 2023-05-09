@@ -18,12 +18,12 @@ const mind = new MindElixir({
     focus: true,
     link: true,
     extend: [
-      {
-        name: 'Node edit',
-        onclick: () => {
-          alert('extend menu')
-        },
-      },
+      // {
+      //   name: 'Node edit',
+      //   onclick: () => {
+      //     alert('extend menu')
+      //   },
+      // },
     ],
   },
   toolBar: true,

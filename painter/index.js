@@ -45,7 +45,7 @@ function generateSvgDom() {
     if (primaryNode.tagName === 'ROOT') continue
     svgContent += PrimaryToSvg(primaryNode)
   }
-  console.log(maxTop, maxBottom, maxLeft, maxRight)
+  // console.log(maxTop, maxBottom, maxLeft, maxRight)
   svgContent += RootToSvg()
   // image margin
   svgHeight = maxBottom - maxTop + IMG_PADDING * 2
@@ -78,6 +78,9 @@ function RootToSvg() {
   const tpcStyle = getComputedStyle(rootTpc)
   const rootOffsetY = root.offsetTop - maxTop
   const rootOffsetX = root.offsetLeft - maxLeft
+  const fontSizeNum = +tpcStyle.fontSize.replace('px', '')
+
+  const textY = fontSizeNum + (rect.height - fontSizeNum) / 2 - fontSizeNum / 8 // 计算文本y轴位移
 
   const svg2ndEle = $d.querySelector('.lines')
 
@@ -86,9 +89,8 @@ function RootToSvg() {
     lines +
     `<g id="root" transform="translate(${rootOffsetX + IMG_PADDING}, ${rootOffsetY + IMG_PADDING})">
       <rect x="${left}" y="${top}" rx="5px" ry="5px" width="${rect.width}" height="${rect.height}" style="fill: ${tpcStyle.backgroundColor};"></rect>
-      <text x="${left + 15}" y="${
-      top + 35
-    }" text-anchor="start" align="top" anchor="start" font-family="微软雅黑" font-size="25px" font-weight="normal" fill="${tpcStyle.color}">
+      <text x="${left + 15}" y="${textY}" text-anchor="start" align="top" anchor="start" font-family="微软雅黑" 
+      font-size="${tpcStyle.fontSize}" font-weight="${tpcStyle.fontWeight}" fill="${tpcStyle.color}">
         ${nodeObj.topic}
       </text>
   </g>`
@@ -149,7 +151,7 @@ function PrimaryToSvg(primaryNode) {
         tags += `<rect x="${topicOffsetLeft}" y="${topicOffsetTop + 4}" rx="5px" ry="5px" width="${tagRect.width}" height="${
           tagRect.height
         }" style="fill: #d6f0f8;"></rect>
-        <text font-family="微软雅黑" font-size="12px"  fill="#276f86" x="${topicOffsetLeft + 4}" y="${topicOffsetTop + 4 + 12}">${
+        <text font-family="微软雅黑" font-size="12px" fill="#276f86" x="${topicOffsetLeft + 4}" y="${topicOffsetTop + 4 + 12}">${
           tag.innerHTML
         }</text>`
       }
@@ -183,10 +185,18 @@ function PrimaryToSvg(primaryNode) {
 // svg多行文本渲染
 function createMultilineText(text, x, fontSize) {
   const size = typeof fontSize === 'number' ? fontSize : parseInt(fontSize.match(/^\d+/)[0], 10)
-  const maxLength = Math.floor(800 / size)
+  let maxLength = Math.floor(800 / size)
   if (text.length < maxLength) return text
   let textElement = ''
   const chars = text.split('')
+
+  // 匹配非中文字符的正则表达式
+  const letterCount = text.match(/[^\u4e00-\u9fa5]/g)?.length ?? 0
+  // 兼容非中文占比过半文本
+  if (letterCount / chars.length > 0.96) {
+    maxLength = Math.floor(maxLength * 2)
+  }
+
   const lines = []
   while (chars.length > 0) {
     const chunk = chars.splice(0, maxLength)
