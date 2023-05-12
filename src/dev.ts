@@ -29,21 +29,21 @@ const options = {
     focus: true,
     link: true,
     extend: [
-      {
-        name: '导出',
-        onclick: async () => {
-          exportPng(mind, 'sss')
-        },
-      },
+      // {
+      //   name: '导出图片',
+      //   onclick: async () => {
+      //     exportPng(mind, 'mind')
+      //   },
+      // },
     ],
   },
   toolBar: true,
   nodeMenu: true,
   keypress: true,
-  allowUndo: false,
-  allowSave: false,
-  allowMinimize: false,
-  allowExit: false,
+  allowUndo: true,
+  allowSave: true,
+  allowMinimize: true,
+  allowExit: true,
   before: {
     // moveDownNode() {
     //   return false

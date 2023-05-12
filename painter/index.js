@@ -50,7 +50,8 @@ function generateSvgDom() {
   // image margin
   svgHeight = maxBottom - maxTop + IMG_PADDING * 2
   svgWidth = maxRight - maxLeft + IMG_PADDING * 2
-  // svgContent += customLinkTransform()
+  svgContent += customLinkTransform()
+
   const svgFile = createSvg(svgHeight, svgWidth)
   svgContent = `<rect x="0" y="0" width="${svgWidth}" height="${svgHeight}" fill="#f6f6f6"></rect>` + svgContent
   svgFile.innerHTML = svgContent
@@ -120,12 +121,11 @@ function PrimaryToSvg(primaryNode) {
     const tpcStyle = getComputedStyle(tpc)
     const tStyle = getComputedStyle(t)
     // console.log(tpc, 'tpc')
-    // console.log(nodeObj.topic, 'tpcRect')
 
     const topicOffsetLeft = left + parseInt(tStyle.paddingLeft) + parseInt(tpcStyle.paddingLeft)
     const topicOffsetTop = top + parseInt(tStyle.paddingTop) + parseInt(tpcStyle.paddingTop) + parseInt(tpcStyle.fontSize)
 
-    const el = createMultilineText(nodeObj.topic, topicOffsetLeft, topicOffsetTop, tpcStyle.fontSize)
+    // const el = createMultilineText(nodeObj.topic, topicOffsetLeft, topicOffsetTop, tpcStyle.fontSize)
     // console.log(el, 'el')
 
     // style render
@@ -141,21 +141,29 @@ function PrimaryToSvg(primaryNode) {
         tpcStyle.backgroundColor
       };"></rect>`
     }
+
+    // 多行文本
+    const { text: tspans, rowsHeight } = createMultilineText(nodeObj.topic, topicOffsetLeft, tpcStyle.fontSize)
+
     // render tags
     let tags = ''
     if (nodeObj.tags && nodeObj.tags.length) {
       const tagsEle = tpc.querySelectorAll('.tags > span')
+      let preTagWidth = 0
       for (let i = 0; i < tagsEle.length; i++) {
         const tag = tagsEle[i]
         const tagRect = tag.getBoundingClientRect()
-        tags += `<rect x="${topicOffsetLeft}" y="${topicOffsetTop + 4}" rx="5px" ry="5px" width="${tagRect.width}" height="${
-          tagRect.height
-        }" style="fill: #d6f0f8;"></rect>
-        <text font-family="微软雅黑" font-size="12px" fill="#276f86" x="${topicOffsetLeft + 4}" y="${topicOffsetTop + 4 + 12}">${
-          tag.innerHTML
-        }</text>`
+        tags += `<rect x="${topicOffsetLeft + preTagWidth}" y="${topicOffsetTop + rowsHeight + 10}" rx="5px" ry="5px" width="${
+          tagRect.width
+        }" height="${tagRect.height}" 
+        style="fill: #d6f0f8;"></rect>
+        <text font-family="微软雅黑" font-size="12px" fill="#276f86" x="${topicOffsetLeft + preTagWidth + 4}" y="${
+          topicOffsetTop + rowsHeight + 24
+        }">${tag.innerHTML}</text> `
+        preTagWidth += tagRect.width
       }
     }
+
     let icons = ''
     if (nodeObj.icons && nodeObj.icons.length) {
       const iconsEle = tpc.querySelectorAll('.icons > span')
@@ -166,7 +174,7 @@ function PrimaryToSvg(primaryNode) {
         <tspan>${icon.innerHTML}</tspan>`
       }
     }
-    const tspans = createMultilineText(nodeObj.topic, topicOffsetLeft, tpcStyle.fontSize)
+
     svg += `<g id="${nodeObj.id}">
       ${border}
       ${backgroundColor}
@@ -186,7 +194,7 @@ function PrimaryToSvg(primaryNode) {
 function createMultilineText(text, x, fontSize) {
   const size = typeof fontSize === 'number' ? fontSize : parseInt(fontSize.match(/^\d+/)[0], 10)
   let maxLength = Math.floor(800 / size)
-  if (text.length < maxLength) return text
+  if (text.length < maxLength) return { text, rowsHeight: 0 }
   let textElement = ''
   const chars = text.split('')
 
@@ -194,7 +202,7 @@ function createMultilineText(text, x, fontSize) {
   const letterCount = text.match(/[^\u4e00-\u9fa5]/g)?.length ?? 0
   // 兼容非中文占比过半文本
   if (letterCount / chars.length > 0.96) {
-    maxLength = Math.floor(maxLength * 2)
+    maxLength = Math.floor(maxLength * 1.85)
   }
 
   const lines = []
@@ -209,7 +217,7 @@ function createMultilineText(text, x, fontSize) {
       dy = 1.2 // Set the offset for the next line (usually 1.2 times font size)
     }
   })
-  return textElement
+  return { text: textElement, rowsHeight: (lines.length - 1) * size * 1.2 }
 }
 
 function splitMultipleLineText() {
@@ -242,7 +250,6 @@ function customLinkTransform() {
     let cnt = 0
     const data = customLink.replace(/\d+(\.\d+)? /g, function (match) {
       match = Number(match)
-      // console.log(match, svgWidth, svgHeight)
       let res
       if (match < 256) {
         res = match
@@ -252,7 +259,7 @@ function customLinkTransform() {
           res = match - 10000 + svgHeight / 2
         } else {
           // x
-          res = match - 10000 + svgWidth / 2
+          res = match - 10000 + svgWidth / 2 + 105
         }
       }
       cnt++
@@ -260,7 +267,6 @@ function customLinkTransform() {
     })
     resLinks += data
   }
-  // console.log(resLinks)
   return resLinks
 }
 
@@ -278,21 +284,42 @@ export const exportSvg = function (instance, fileName) {
 
 export const exportPng = async function (instance, fileName, download = true) {
   if (!instance) throw new Error('Mind-elixir instance is not presented. ---> exportSvg(instance, fileName)')
-  initVar()
-  $d = instance.container
-  const svgFile = generateSvgDom()
-  const canvas = document.createElement('canvas')
-  canvas.style.display = 'none'
-  const ctx = canvas.getContext('2d')
 
-  const v = await Canvg.fromString(ctx, head + svgFile.outerHTML.replace(/&nbsp;/g, ' '))
-  v.start()
-  const imgURL = canvas.toDataURL('image/png')
-  if (!download) return imgURL
-  const a = document.createElement('a')
-  a.href = imgURL
-  a.download = fileName || getFileName() + '.png'
-  a.click()
+  instance.scale(1)
+  setTimeout(createPng, 300) // 修复放大缩小导出图片bug
+
+  async function createPng() {
+    initVar()
+    $d = instance.container
+    const svgFile = generateSvgDom()
+    const canvas = document.createElement('canvas')
+    canvas.style.display = 'none'
+    const ctx = canvas.getContext('2d')
+    const v = await Canvg.fromString(ctx, head + svgFile.outerHTML.replace(/&nbsp;/g, ' '))
+    v.start()
+    const imgURL = canvas.toDataURL('image/png')
+    if (!download) return imgURL
+    const a = document.createElement('a')
+    a.href = imgURL
+    a.download = fileName || getFileName() + '.png'
+    a.click()
+  }
+
+  // initVar()
+  // $d = instance.container
+  // const svgFile = generateSvgDom()
+  // const canvas = document.createElement('canvas')
+  // canvas.style.display = 'none'
+  // const ctx = canvas.getContext('2d')
+
+  // const v = await Canvg.fromString(ctx, head + svgFile.outerHTML.replace(/&nbsp;/g, ' '))
+  // v.start()
+  // const imgURL = canvas.toDataURL('image/png')
+  // if (!download) return imgURL
+  // const a = document.createElement('a')
+  // a.href = imgURL
+  // a.download = fileName || getFileName() + '.png'
+  // a.click()
 }
 
 export default {

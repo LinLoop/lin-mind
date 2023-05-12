@@ -236,6 +236,7 @@ export default function (mind, option) {
         if (e.target.parentElement.nodeName === 'T' || e.target.parentElement.nodeName === 'ROOT') {
           mind.createLink(from, mind.currentNode)
           mind.bus.fire('operation', { name: 'linkNode', from: from.nodeObj, to: mind.currentNode.nodeObj }) // add to history
+          mind.currentLink = null // 修复创建连接线后删除节点会优先删除连接线问题
         } else {
           console.log('link cancel')
         }
