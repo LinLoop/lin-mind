@@ -109,7 +109,7 @@ export const createLink = function (from, to, isInitPaint, obj) {
     this.currentLink = newSvgGroup
   }
   this.linkSvgGroup.appendChild(newSvgGroup)
-  if (!isInitPaint) {
+  if (!isInitPaint && !this.mobileMenu) {
     this.showLinkController(p2x, p2y, p3x, p3y, newLinkObj, fromData, toData)
   }
 }
@@ -132,6 +132,15 @@ export const removeLink = function (linkSvg) {
 }
 export const selectLink = function (targetElement) {
   if (!this.editable) return // 修复只读模式不可编辑bug
+  if (this.mobileMenu) {
+    const menuContainer = document.querySelector('mmenu')
+    const hidden = menuContainer.hasAttribute('hidden')
+    if (hidden) {
+      menuContainer.removeAttribute('hidden')
+    } else {
+      menuContainer.setAttribute('hidden', true)
+    }
+  }
 
   this.currentLink = targetElement
   const obj = targetElement.linkObj
@@ -163,8 +172,8 @@ export const selectLink = function (targetElement) {
   const p2y = fromCenterY + obj.delta1.y
   const p3x = toCenterX + obj.delta2.x
   const p3y = toCenterY + obj.delta2.y
-
-  this.showLinkController(p2x, p2y, p3x, p3y, obj, fromData, toData)
+  // 移动端不支持控制手势
+  if (!this.mobileMenu) this.showLinkController(p2x, p2y, p3x, p3y, obj, fromData, toData)
 }
 export const hideLinkController = function () {
   this.linkController.style.display = 'none'
@@ -217,7 +226,7 @@ export const showLinkController = function (p2x, p2y, p3x, p3y, linkObj, fromDat
 
     this.P2.style.top = p2y + 'px'
     this.P2.style.left = p2x + 'px'
-    this.currentLink.children[0].setAttribute('d', `M ${p1x} ${p1y} C ${p2x} ${p2y} ${p3x} ${p3y} ${p4x} ${p4y} `)
+    this.currentLink?.children[0].setAttribute('d', `M ${p1x} ${p1y} C ${p2x} ${p2y} ${p3x} ${p3y} ${p4x} ${p4y} `)
     this.line1.setAttribute('x1', p1x)
     this.line1.setAttribute('y1', p1y)
     this.line1.setAttribute('x2', p2x)
@@ -237,8 +246,8 @@ export const showLinkController = function (p2x, p2y, p3x, p3y, linkObj, fromDat
 
     this.P3.style.top = p3y + 'px'
     this.P3.style.left = p3x + 'px'
-    this.currentLink.children[0].setAttribute('d', `M ${p1x} ${p1y} C ${p2x} ${p2y} ${p3x} ${p3y} ${p4x} ${p4y} `)
-    this.currentLink.children[1].setAttribute('d', `M ${arrowPoint.x1} ${arrowPoint.y1} L ${p4x} ${p4y} L ${arrowPoint.x2} ${arrowPoint.y2} `)
+    this.currentLink?.children[0].setAttribute('d', `M ${p1x} ${p1y} C ${p2x} ${p2y} ${p3x} ${p3y} ${p4x} ${p4y} `)
+    this.currentLink?.children[1].setAttribute('d', `M ${arrowPoint.x1} ${arrowPoint.y1} L ${p4x} ${p4y} L ${arrowPoint.x2} ${arrowPoint.y2} `)
     this.line2.setAttribute('x1', p3x)
     this.line2.setAttribute('y1', p3y)
     this.line2.setAttribute('x2', p4x)

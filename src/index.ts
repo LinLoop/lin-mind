@@ -496,7 +496,8 @@ MindElixir.prototype = {
     this.nodeMenu && nodeMenu(this)
     this.keypress && keypress(this)
 
-    if (isMobile() && this.mobileMenu) {
+    // if (isMobile() && this.mobileMenu) {
+    if (this.mobileMenu) {
       mobileMenu(this)
     } else {
       this.contextMenu && contextMenu(this, this.contextMenuOption)

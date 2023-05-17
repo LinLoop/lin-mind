@@ -75,49 +75,49 @@ export default {
           },
         ],
       },
-      // {
-      //   topic: '专注',
-      //   id: 'bd1b9b94a9a7a913',
-      //   direction: 1,
-      //   expanded: true,
-      //   children: [
-      //     {
-      //       topic: '点击右键，专注模式',
-      //       id: 'bd1bb2ac4bbab458',
-      //     },
-      //     {
-      //       topic: '需要取消专注时同样通过右键菜单，点击取消专注',
-      //       id: 'bd1bb4b14d6697c3',
-      //     },
-      //   ],
-      // },
-      // {
-      //   topic: '左侧菜单',
-      //   id: 'bd1b9d1816ede134',
-      //   direction: 0,
-      //   expanded: true,
-      //   children: [
-      //     {
-      //       topic: '选择节点分布方式',
-      //       id: 'bd1ba11e620c3c1a',
-      //       expanded: true,
-      //       children: [
-      //         {
-      //           topic: '左侧分布',
-      //           id: 'bd1c1cb51e6745d3',
-      //         },
-      //         {
-      //           topic: '右侧分布',
-      //           id: 'bd1c1e12fd603ff6',
-      //         },
-      //         {
-      //           topic: '左右分布',
-      //           id: 'bd1c1f03def5c97b',
-      //         },
-      //       ],
-      //     },
-      //   ],
-      // },
+      {
+        topic: '专注',
+        id: 'bd1b9b94a9a7a913',
+        direction: 1,
+        expanded: true,
+        children: [
+          {
+            topic: '点击右键，专注模式',
+            id: 'bd1bb2ac4bbab458',
+          },
+          {
+            topic: '需要取消专注时同样通过右键菜单，点击取消专注',
+            id: 'bd1bb4b14d6697c3',
+          },
+        ],
+      },
+      {
+        topic: '左侧菜单',
+        id: 'bd1b9d1816ede134',
+        direction: 0,
+        expanded: true,
+        children: [
+          {
+            topic: '选择节点分布方式',
+            id: 'bd1ba11e620c3c1a',
+            expanded: true,
+            children: [
+              {
+                topic: '左侧分布',
+                id: 'bd1c1cb51e6745d3',
+              },
+              {
+                topic: '右侧分布',
+                id: 'bd1c1e12fd603ff6',
+              },
+              {
+                topic: '左右分布',
+                id: 'bd1c1f03def5c97b',
+              },
+            ],
+          },
+        ],
+      },
       // {
       //   topic: '下方菜单',
       //   id: 'bd1ba66996df4ba4',
@@ -243,20 +243,20 @@ export default {
       //   ],
       // },
       // {
-      //   topic: '导出数据',
-      //   id: 'beeb7586973430db',
-      //   direction: 1,
-      //   expanded: true,
-      //   children: [
-      //     {
-      //       topic: 'JSON',
-      //       id: 'beeb784cc189375f',
-      //     },
-      //     {
-      //       topic: 'HTML',
-      //       id: 'beeb7a6bec2d68f5',
-      //     },
-      //   ],
+      //   //   topic: '导出数据',
+      //   //   id: 'beeb7586973430db',
+      //   //   direction: 1,
+      //   //   expanded: true,
+      //   //   children: [
+      //   //     {
+      //   //       topic: 'JSON',
+      //   //       id: 'beeb784cc189375f',
+      //   //     },
+      //   //     {
+      //   //       topic: 'HTML',
+      //   //       id: 'beeb7a6bec2d68f5',
+      //   //     },
+      //   //   ],
       // },
       // {
       //   topic: '注意',

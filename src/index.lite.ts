@@ -283,7 +283,8 @@ MindElixir.prototype = {
     // plugin
     this.toolBar && toolBar(this, this.contextMenuOption)
 
-    if (isMobile() && this.mobileMenu) {
+    // if (isMobile() && this.mobileMenu) {
+    if (this.mobileMenu) {
       mobileMenu(this)
     } else {
       this.contextMenu && contextMenu(this, this.contextMenuOption)

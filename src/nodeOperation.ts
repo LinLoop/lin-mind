@@ -347,8 +347,14 @@ export const moveUpNode = function (el, history = true) {
   const grp = nodeEle.parentNode.parentNode
   const obj = nodeEle.nodeObj
   moveUpObj(obj)
+
+  // const pre = grp.previousSibling
+  // console.log(obj)
+  // console.log(pre)
+
   grp.parentNode.insertBefore(grp, grp.previousSibling)
-  // if (grp.previousSibling && grp.previousSibling.className === grp.className) {
+
+  // if () {
   //   grp.previousSibling.insertAdjacentElement('beforebegin', grp)
   // } else {
   //   // grp.parentNode.appendChild(grp)

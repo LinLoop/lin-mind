@@ -88,7 +88,7 @@ function createToolBarRBContainer(mind, option) {
   }
   return toolBarRBContainer
 }
-export default function(mind, option) {
+export default function (mind, option) {
   mind.container.append(createToolBarRBContainer(mind, option))
   // mind.container.append(createToolBarLTContainer(mind))
 }

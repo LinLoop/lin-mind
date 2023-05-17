@@ -50,10 +50,13 @@ function generateSvgDom() {
   // image margin
   svgHeight = maxBottom - maxTop + IMG_PADDING * 2
   svgWidth = maxRight - maxLeft + IMG_PADDING * 2
+
+  // linklines
   svgContent += customLinkTransform()
 
   const svgFile = createSvg(svgHeight, svgWidth)
   svgContent = `<rect x="0" y="0" width="${svgWidth}" height="${svgHeight}" fill="#f6f6f6"></rect>` + svgContent
+
   svgFile.innerHTML = svgContent
   // document.body.append(svgFile)
   return svgFile
@@ -170,6 +173,7 @@ function PrimaryToSvg(primaryNode) {
       for (let i = 0; i < iconsEle.length; i++) {
         const icon = iconsEle[i]
         const iconRect = icon.getBoundingClientRect()
+        console.log(iconRect, 'iconRect')
         icons += `
         <tspan>${icon.innerHTML}</tspan>`
       }
@@ -244,6 +248,7 @@ function getFileName() {
 
 function customLinkTransform() {
   const customLinks = $d.querySelector('.topiclinks').children
+
   let resLinks = ''
   for (let i = 0; i < customLinks.length; i++) {
     const customLink = customLinks[i].outerHTML
@@ -256,10 +261,10 @@ function customLinkTransform() {
       } else {
         if (cnt % 2) {
           // y
-          res = match - 10000 + svgHeight / 2
+          res = match - maxTop + IMG_PADDING
         } else {
           // x
-          res = match - 10000 + svgWidth / 2 + 105
+          res = match - maxLeft + IMG_PADDING
         }
       }
       cnt++
@@ -284,42 +289,27 @@ export const exportSvg = function (instance, fileName) {
 
 export const exportPng = async function (instance, fileName, download = true) {
   if (!instance) throw new Error('Mind-elixir instance is not presented. ---> exportSvg(instance, fileName)')
-
   instance.scale(1)
-  setTimeout(createPng, 300) // 修复放大缩小导出图片bug
-
-  async function createPng() {
-    initVar()
-    $d = instance.container
-    const svgFile = generateSvgDom()
-    const canvas = document.createElement('canvas')
-    canvas.style.display = 'none'
-    const ctx = canvas.getContext('2d')
-    const v = await Canvg.fromString(ctx, head + svgFile.outerHTML.replace(/&nbsp;/g, ' '))
-    v.start()
-    const imgURL = canvas.toDataURL('image/png')
-    if (!download) return imgURL
-    const a = document.createElement('a')
-    a.href = imgURL
-    a.download = fileName || getFileName() + '.png'
-    a.click()
-  }
-
-  // initVar()
-  // $d = instance.container
-  // const svgFile = generateSvgDom()
-  // const canvas = document.createElement('canvas')
-  // canvas.style.display = 'none'
-  // const ctx = canvas.getContext('2d')
-
-  // const v = await Canvg.fromString(ctx, head + svgFile.outerHTML.replace(/&nbsp;/g, ' '))
-  // v.start()
-  // const imgURL = canvas.toDataURL('image/png')
-  // if (!download) return imgURL
-  // const a = document.createElement('a')
-  // a.href = imgURL
-  // a.download = fileName || getFileName() + '.png'
-  // a.click()
+  // 等待dom操作完成
+  await new Promise(resolve => {
+    setTimeout(() => {
+      resolve()
+    }, 300)
+  })
+  initVar()
+  $d = instance.container
+  const svgFile = generateSvgDom()
+  const canvas = document.createElement('canvas')
+  canvas.style.display = 'none'
+  const ctx = canvas.getContext('2d')
+  const v = await Canvg.fromString(ctx, head + svgFile.outerHTML.replace(/&nbsp;/g, ' '))
+  v.start()
+  const imgURL = canvas.toDataURL('image/png')
+  if (!download) return imgURL
+  const a = document.createElement('a')
+  a.href = imgURL
+  a.download = fileName || getFileName() + '.png'
+  a.click()
 }
 
 export default {

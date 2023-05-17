@@ -1,6 +1,6 @@
 import { LEFT, RIGHT, SIDE } from '../const'
 import { NodeObj } from '../index'
-import { encodeHTML } from '../utils/index'
+import { encodeHTML, createToast } from '../utils/index'
 export type Top = HTMLElement
 
 export type Group = HTMLElement
@@ -165,30 +165,30 @@ export function createInputDiv(tpc: Topic) {
   })
 
   div.addEventListener('paste', event => {
-    const item = event.clipboardData && event.clipboardData.items
-    let file = null
-    if (item && item.length) {
-      for (let i = 0; i < item.length; i++) {
-        if (item[i].type.indexOf('image') !== -1) {
-          file = item[i].getAsFile()
-        }
-        break
-      }
-      const tempParentNode = tpc.parentNode
-      const fr = new FileReader()
-      // 读取file 然后取回base64 编码路径
-      if (file) fr.readAsDataURL(file)
-      fr.onload = e => {
-        const tempDiv = document.createElement('div')
-        tempDiv.style.marginTop = '6px'
-        const img = document.createElement('img')
-        img.src = e.target.result as string
-        img.style.maxWidth = '350px'
-        tpc.appendChild(tempDiv)
-        tpc.childNodes[0].textContent = ''
-        tpc.appendChild(img)
-      }
-    }
+    event.preventDefault() // 阻止默认的黏贴行为
+    const clipboardData = event.clipboardData
+    const types = clipboardData.types
+    const text = clipboardData.getData('text/plain')
+    if (types.includes('Files')) createToast('不支持黏贴图片文件')
+    // 将处理后的文本插入到需要黏贴的位置
+    document.execCommand('insertHTML', false, text)
+
+    // const items = event.clipboardData && event.clipboardData.items
+    // if (items && items.length) {
+    // const fr = new FileReader()
+    // // 读取file 然后取回base64 编码路径
+    // if (file) fr.readAsDataURL(file)
+    // fr.onload = e => {
+    //   const tempDiv = document.createElement('div')
+    //   tempDiv.style.marginTop = '6px'
+    //   const img = document.createElement('img')
+    //   img.src = e.target.result as string
+    //   img.style.maxWidth = '350px'
+    //   tpc.appendChild(tempDiv)
+    //   tpc.childNodes[0].textContent = ''
+    //   tpc.appendChild(img)
+    // }
+    // }
   })
   // console.timeEnd('createInputDiv')
 }
@@ -260,6 +260,7 @@ export function layout() {
   if (!primaryNodes || primaryNodes.length === 0) return
   if (this.direction === SIDE) {
     // initiate direction of primary nodes
+    // primaryNodes.forEach(node => (node.direction = undefined)) // 修复删除节点后平行结构不生效问题
     let lcount = 0
     let rcount = 0
     // .sort((a, b) => a.direction - b.direction)

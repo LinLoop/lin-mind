@@ -22,7 +22,7 @@ const options = {
   direction: MindElixir.SIDE,
   // direction: MindElixir.RIGHT,
   locale: 'cn',
-  draggable: true,
+  draggable: false,
   editable: true,
   contextMenu: true,
   contextMenuOption: {
@@ -32,7 +32,8 @@ const options = {
       // {
       //   name: '导出图片',
       //   onclick: async () => {
-      //     exportPng(mind, 'mind')
+      //     const url = await exportPng(mind, 'mind')
+      //     console.log(url)
       //   },
       // },
     ],
@@ -42,8 +43,9 @@ const options = {
   keypress: true,
   allowUndo: true,
   allowSave: true,
-  allowMinimize: true,
-  allowExit: true,
+  allowMinimize: false,
+  allowExit: false,
+  mobileMenu: false,
   before: {
     // moveDownNode() {
     //   return false

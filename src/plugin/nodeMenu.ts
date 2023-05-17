@@ -67,8 +67,14 @@ export default function (mind) {
   <span class="background">${i18n[locale].background}</span>
   </div>`
   )
-  const tagDiv = createDiv('nm-tag', `${i18n[locale].tag}<input class="nm-tag" tabindex="-1" placeholder="${i18n[locale].tagsSeparate}" />`)
-  const iconDiv = createDiv('nm-icon', `${i18n[locale].icon}<input class="nm-icon" tabindex="-1" placeholder="${i18n[locale].iconsSeparate}" />`)
+  const tagDiv = createDiv(
+    'nm-tag',
+    `${i18n[locale].tag}<input class="nm-tag" tabindex="-1"  maxlength="40"  placeholder="${i18n[locale].tagsSeparate}"/>`
+  )
+  // const iconDiv = createDiv(
+  //   'nm-icon',
+  //   `${i18n[locale].icon}<input class="nm-icon" tabindex="-1"  maxlength="40" placeholder="${i18n[locale].iconsSeparate}" />`
+  // )
   // const urlDiv = createDiv('nm-url', `${i18n[locale].url}<input class="nm-url" tabindex="-1" />`)
   const memoDiv = createDiv('nm-memo', `${i18n[locale].memo || 'Memo'}<textarea class="nm-memo" rows="5" tabindex="-1" />`)
 
@@ -80,10 +86,11 @@ export default function (mind) {
   </svg></div>
   `
   menuContainer.appendChild(styleDiv)
-  menuContainer.appendChild(tagDiv)
-  menuContainer.appendChild(iconDiv)
-  // menuContainer.appendChild(urlDiv)
-  menuContainer.appendChild(memoDiv)
+  if (!mind.mobileMenu) {
+    menuContainer.appendChild(tagDiv)
+    // menuContainer.appendChild(iconDiv)
+    menuContainer.appendChild(memoDiv)
+  }
   menuContainer.hidden = true
   mind.container.append(menuContainer)
 
@@ -93,7 +100,7 @@ export default function (mind) {
   const buttonContainer: HTMLElement = menuContainer.querySelector('.button-container')
   const fontBtn: HTMLElement = menuContainer.querySelector('.font')
   const tagInput: HTMLInputElement = mind.container.querySelector('.nm-tag')
-  const iconInput: HTMLInputElement = mind.container.querySelector('.nm-icon')
+  // const iconInput: HTMLInputElement = mind.container.querySelector('.nm-icon')
   // const urlInput:HTMLInputElement = mind.container.querySelector('.nm-url')
   const memoInput: HTMLInputElement = mind.container.querySelector('.nm-memo')
 
@@ -153,34 +160,40 @@ export default function (mind) {
       mind.updateNodeStyle(mind.currentNode.nodeObj)
     }
   }
-  tagInput.onchange = (e: InputEvent & { target: HTMLInputElement }) => {
-    if (!mind.currentNode) return
-    if (typeof e.target.value === 'string') {
-      const newTags = e.target.value.split(',')
-      mind.updateNodeTags(
-        mind.currentNode.nodeObj,
-        newTags.filter(tag => tag)
-      )
+
+  if (!mind.mobileMenu) {
+    tagInput.onchange = (e: InputEvent & { target: HTMLInputElement }) => {
+      if (!mind.currentNode) return
+      if (typeof e.target.value === 'string') {
+        const newTags = e.target.value.split(',')
+        mind.updateNodeTags(
+          mind.currentNode.nodeObj,
+          newTags.filter(tag => tag)
+        )
+      }
+    }
+
+    memoInput.onchange = (e: InputEvent & { target: HTMLInputElement }) => {
+      if (!mind.currentNode) return
+      mind.currentNode.nodeObj.memo = e.target.value
     }
   }
-  iconInput.onchange = (e: InputEvent & { target: HTMLInputElement }) => {
-    if (!mind.currentNode) return
-    if (typeof e.target.value === 'string') {
-      const newIcons = e.target.value.split(',')
-      mind.updateNodeIcons(
-        mind.currentNode.nodeObj,
-        newIcons.filter(icon => icon)
-      )
-    }
-  }
+
+  // iconInput.onchange = (e: InputEvent & { target: HTMLInputElement }) => {
+  //   if (!mind.currentNode) return
+  //   if (typeof e.target.value === 'string') {
+  //     const newIcons = e.target.value.split(',')
+  //     mind.updateNodeIcons(
+  //       mind.currentNode.nodeObj,
+  //       newIcons.filter(icon => icon)
+  //     )
+  //   }
+  // }
   // urlInput.onchange = (e:InputEvent & { target: HTMLInputElement}) => {
   //   if (!mind.currentNode) return
   //   mind.updateNodeHyperLink(mind.currentNode.nodeObj, e.target.value)
   // }
-  memoInput.onchange = (e: InputEvent & { target: HTMLInputElement }) => {
-    if (!mind.currentNode) return
-    mind.currentNode.nodeObj.memo = e.target.value
-  }
+
   let state = 'open'
   buttonContainer.onclick = e => {
     if (state === 'open') {
@@ -227,7 +240,7 @@ export default function (mind) {
     }
     // 判断是否是根节点
     const isRoot = nodeObj.root
-    if (isRoot && mind.editable) document.getElementById('cm-add_parent').className = 'disabled'
+    if (isRoot && mind.editable && !mind.mobileMenu) document.getElementById('cm-add_parent').className = 'disabled'
     // 判断是否专注模式
     const isFocusMode = !!mind.isFocusMode
 
@@ -236,7 +249,7 @@ export default function (mind) {
       document.getElementById('focus').className = isRoot ? 'disabled' : ''
     }
 
-    if (mind.editable) {
+    if (mind.editable && !mind.mobileMenu) {
       mind.container.oncontextmenu(clickEvent)
       menuContainer.hidden = false
     }
@@ -258,18 +271,22 @@ export default function (mind) {
         menuContainer.querySelector('.palette[data-color="' + nodeObj.style.color + '"]').className = 'palette nmenu-selected'
       }
     }
-    if (nodeObj.tags) {
-      tagInput.value = nodeObj.tags.join(',')
-    } else {
-      tagInput.value = ''
+    if (!mind.mobileMenu) {
+      if (nodeObj.tags) {
+        tagInput.value = nodeObj.tags.join(',')
+      } else {
+        tagInput.value = ''
+      }
+
+      memoInput.value = nodeObj.memo || ''
     }
-    if (nodeObj.icons) {
-      iconInput.value = nodeObj.icons.join(',')
-    } else {
-      iconInput.value = ''
-    }
+
+    // if (nodeObj.icons) {
+    //   iconInput.value = nodeObj.icons.join(',')
+    // } else {
+    //   iconInput.value = ''
+    // }
     // urlInput.value = nodeObj.hyperLink || ''
-    memoInput.value = nodeObj.memo || ''
   })
   // 处理图片点击
   mind.map.addEventListener('click', function (e) {

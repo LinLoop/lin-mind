@@ -301,6 +301,16 @@ export function getObjSibling(obj: NodeObj): NodeObj {
   }
 }
 
+export function moveObj(obj, targetObj) {
+  const childrenList = obj.parent.children
+  const index = childrenList.indexOf(obj)
+  const targetIndex = childrenList.indexOf(targetObj)
+
+  const t = childrenList[index]
+  childrenList[index] = childrenList[targetIndex]
+  childrenList[targetIndex] = t
+}
+
 export function moveUpObj(obj: NodeObj) {
   const childrenList = obj.parent.children
   const index = childrenList.indexOf(obj)
