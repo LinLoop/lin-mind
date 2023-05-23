@@ -301,14 +301,22 @@ export function getObjSibling(obj: NodeObj): NodeObj {
   }
 }
 
-export function moveObj(obj, targetObj) {
+export function moveBeforeObj(obj, targetObj) {
+  const childrenList = obj.parent.children
+  let index = childrenList.indexOf(obj)
+  const targetIndex = childrenList.indexOf(targetObj)
+  childrenList.splice(targetIndex, 0, obj)
+  if (targetIndex < index) index += 1
+  childrenList.splice(index, 1)
+  // console.log(childrenList.map(item => item.topic))
+}
+
+export function moveAfterObj(obj, targetObj) {
   const childrenList = obj.parent.children
   const index = childrenList.indexOf(obj)
   const targetIndex = childrenList.indexOf(targetObj)
-
-  const t = childrenList[index]
-  childrenList[index] = childrenList[targetIndex]
-  childrenList[targetIndex] = t
+  childrenList.splice(targetIndex + 1, 0, obj)
+  childrenList.splice(index, 1)
 }
 
 export function moveUpObj(obj: NodeObj) {

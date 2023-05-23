@@ -247,7 +247,7 @@ export function createChildren(data: NodeObj[], container?: HTMLElement, directi
 }
 
 // Set primary nodes' direction and invoke createChildren()
-export function layout() {
+export function layout(layoutSide = true) {
   console.time('layout')
   this.root.innerHTML = ''
   this.box.innerHTML = ''
@@ -258,12 +258,26 @@ export function layout() {
 
   const primaryNodes: NodeObj[] = this.nodeData.children
   if (!primaryNodes || primaryNodes.length === 0) return
-  if (this.direction === SIDE) {
+  if (this.direction === SIDE && layoutSide) {
     // initiate direction of primary nodes
-    // primaryNodes.forEach(node => (node.direction = undefined)) // 修复删除节点后平行结构不生效问题
+    // 均分左右方向
+    const hasDirection = primaryNodes.map(item => item.direction).filter(item => item !== undefined)
+    if (hasDirection.length === primaryNodes.length) {
+      const half = Math.ceil(primaryNodes.length / 2)
+      const tranceDirection = primaryNodes[half - 1].direction === LEFT ? RIGHT : LEFT
+      const originDirection = tranceDirection === LEFT ? RIGHT : LEFT
+      primaryNodes.forEach((item, index) => {
+        item.direction = index >= half ? tranceDirection : originDirection
+      })
+    }
+
+    console.log(
+      hasDirection,
+      primaryNodes.map(item => item.direction)
+    )
+
     let lcount = 0
     let rcount = 0
-    // .sort((a, b) => a.direction - b.direction)
     primaryNodes
       .sort((a, b) => a.direction - b.direction)
       .map(node => {

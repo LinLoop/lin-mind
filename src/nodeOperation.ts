@@ -8,6 +8,8 @@ import {
   insertParentNodeObj,
   checkMoveValid,
   addParentLink,
+  moveBeforeObj,
+  moveAfterObj,
   moveUpObj,
   moveDownObj,
   moveNodeBeforeObj,
@@ -17,6 +19,7 @@ import {
 import { findEle, createExpander, shapeTpc } from './utils/dom'
 import { rgbHex } from './utils/index'
 import { LEFT, RIGHT, SIDE } from './const'
+import MindElixir from './index'
 const $d = document
 
 /**
@@ -346,27 +349,30 @@ export const moveUpNode = function (el, history = true) {
   if (!nodeEle) return
   const grp = nodeEle.parentNode.parentNode
   const obj = nodeEle.nodeObj
-  moveUpObj(obj)
+  const direction = obj.direction
+  const childrenList = obj.parent.children
+  if (childrenList.length === 1) return
+  const index = childrenList.indexOf(obj)
+  let preIndex, preObj
+  if (grp.className && index === 0 && this.direction === MindElixir.SIDE) {
+    // 如果是一级节点顶部
+    preIndex = childrenList.findIndex(item => item.direction !== direction)
+    preObj = childrenList[preIndex]
+    const preGrp = findEle(preObj.id).parentNode.parentNode
+    moveBeforeObj(obj, preObj)
+    grp.parentNode.insertBefore(grp, preGrp)
+  } else if (grp.className && index !== 0 && grp.className !== grp.previousSibling.className && this.direction === MindElixir.SIDE) {
+    // 如果是一级节点底部
+    preIndex = childrenList.length - 1
+    preObj = childrenList[preIndex]
+    const preGrp = findEle(preObj.id).parentNode.parentNode
+    moveAfterObj(obj, preObj)
+    preGrp.insertAdjacentElement('afterend', grp)
+  } else {
+    moveUpObj(obj)
+    grp.parentNode.insertBefore(grp, grp.previousSibling)
+  }
 
-  // const pre = grp.previousSibling
-  // console.log(obj)
-  // console.log(pre)
-
-  grp.parentNode.insertBefore(grp, grp.previousSibling)
-
-  // if () {
-  //   grp.previousSibling.insertAdjacentElement('beforebegin', grp)
-  // } else {
-  //   // grp.parentNode.appendChild(grp)
-  //   // const siblings = grp.parentNode.childNodes
-  //   // let sibling = grp.y
-  //   // while (sibling) {
-  //   //   if (sibling.nodeType === 1 && sibling.className !== nodeEle.className) {
-  //   //     return sibling;
-  //   //   }
-  //   //   sibling = sibling.nextSibling;
-  //   // }
-  // }
   this.linkDiv()
   if (!history) return
   this.bus.fire('operation', {
@@ -390,11 +396,35 @@ export const moveDownNode = function (el, history = true) {
   if (!nodeEle) return
   const grp = nodeEle.parentNode.parentNode
   const obj = nodeEle.nodeObj
-  moveDownObj(obj)
-  if (grp.nextSibling) {
-    grp.nextSibling.insertAdjacentElement('afterend', grp)
+  const direction = obj.direction
+  const childrenList = obj.parent.children
+  if (childrenList.length === 1) return
+  const index = childrenList.indexOf(obj)
+  let nextIndex, nextObj
+  if (grp.className && index === childrenList.length - 1 && this.direction === MindElixir.SIDE) {
+    nextIndex = childrenList.findIndex(item => item.direction === direction)
+    nextObj = childrenList[nextIndex]
+    const preGrp = findEle(nextObj.id).parentNode.parentNode
+    moveBeforeObj(obj, nextObj)
+    grp.parentNode.insertBefore(grp, preGrp)
+  } else if (
+    grp.className &&
+    index !== childrenList.length - 1 &&
+    grp.className !== grp.nextSibling.className &&
+    this.direction === MindElixir.SIDE
+  ) {
+    nextIndex = 0
+    nextObj = childrenList[nextIndex]
+    const preGrp = findEle(nextObj.id).parentNode.parentNode
+    moveBeforeObj(obj, nextObj)
+    grp.parentNode.insertBefore(grp, preGrp)
   } else {
-    grp.parentNode.prepend(grp)
+    moveDownObj(obj)
+    if (grp.nextSibling) {
+      grp.nextSibling.insertAdjacentElement('afterend', grp)
+    } else {
+      grp.parentNode.prepend(grp)
+    }
   }
   this.linkDiv()
   if (!history) return

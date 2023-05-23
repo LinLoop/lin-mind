@@ -1,5 +1,6 @@
 import { getBranchDepth, isOutOfBoundary, createToast, getNodeChildDepth, getNodeDepth } from '../utils/index'
 import i18n from '../i18n'
+import MindElixir from '..'
 
 export default function (mind) {
   const locale = i18n[mind.locale] ? mind.locale : 'en'
@@ -138,7 +139,10 @@ export default function (mind) {
     if (e.keyCode === 8 || e.keyCode === 46) {
       // del,backspace
       if (mind.currentLink) mind.removeLink()
-      else mind.removeNode()
+      else {
+        mind.removeNode()
+        if (MindElixir.SIDE === mind.direction) mind.initSide()
+      }
     } else {
       key2func[e.keyCode] && key2func[e.keyCode](e)
     }

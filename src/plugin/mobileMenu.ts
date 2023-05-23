@@ -1,4 +1,5 @@
 import './mobileMenu.less'
+import MindElixir from '..'
 import i18n from '../i18n'
 import { findEle } from '../utils/dom'
 import { isOutOfBoundary, getBranchDepth, createToast, throttle } from '../utils/index'
@@ -162,6 +163,7 @@ export default function (mind, option?) {
     if (isRoot) return
     if (mind.currentLink) return mind.removeLink()
     mind.removeNode()
+    if (MindElixir.SIDE === mind.direction) mind.initSide()
   }
 
   up.onclick = e => {

@@ -40,11 +40,11 @@ const options = {
   },
   toolBar: true,
   nodeMenu: true,
-  keypress: true,
+  keypress: false,
   allowUndo: true,
   allowSave: true,
-  allowMinimize: false,
-  allowExit: false,
+  allowMinimize: true,
+  allowExit: true,
   mobileMenu: false,
   before: {
     // moveDownNode() {

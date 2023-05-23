@@ -5,119 +5,155 @@ export default {
     root: true,
     children: [
       {
-        topic: '什么是 Minde Elixir',
-        id: 'bd4313fbac40284b',
+        topic: '什么是 Minde Elixir1',
+        id: 'bd4313fbac40284b1',
         direction: 0,
         expanded: true,
-        children: [
-          {
-            topic: '一个思维导图内核',
-            id: 'beeb823afd6d2114',
-          },
-          {
-            topic: '免费',
-            id: 'c1f068377de9f3a0',
-          },
-          {
-            topic: '即将开源',
-            id: 'c1f06d38a09f23ca',
-          },
-          {
-            topic: '无框架依赖',
-            id: 'c1f06e4cbcf16463',
-            expanded: true,
-            children: [],
-          },
-          {
-            topic: '两步轻松接入已有项目',
-            id: 'c1f1f11a7fbf7550',
-            children: [
-              {
-                topic: "import MindElixir from 'mind-elixir'",
-                id: 'c1f1e245b0a89f9b',
-              },
-              {
-                topic: 'new MindElixir({...}).init(data)',
-                id: 'c1f1ebc7072c8928',
-              },
-            ],
-          },
-          {
-            topic: '使用简单',
-            id: 'c1f0723c07b408d7',
-            expanded: true,
-            children: [
-              {
-                topic: '操作手感类似其他主流思维导图应用',
-                id: 'c1f09612fd89920d',
-              },
-            ],
-          },
-        ],
       },
       {
-        topic: '基本操作',
-        id: 'bd1b66c4b56754d9',
-        direction: 0,
-        expanded: true,
-        children: [
-          {
-            topic: 'tab 新建子节点',
-            id: 'bd1b6892bcab126a',
-          },
-          {
-            topic: 'enter 新建同级节点',
-            id: 'bd1b6b632a434b27',
-          },
-          {
-            topic: 'del 删除节点',
-            id: 'bd1b983085187c0a',
-          },
-        ],
-      },
-      {
-        topic: '专注',
-        id: 'bd1b9b94a9a7a913',
+        topic: '什么是 Minde Elixir2',
+        id: 'bd4313fbac40284b2',
         direction: 1,
         expanded: true,
-        children: [
-          {
-            topic: '点击右键，专注模式',
-            id: 'bd1bb2ac4bbab458',
-          },
-          {
-            topic: '需要取消专注时同样通过右键菜单，点击取消专注',
-            id: 'bd1bb4b14d6697c3',
-          },
-        ],
       },
       {
-        topic: '左侧菜单',
-        id: 'bd1b9d1816ede134',
+        topic: '什么是 Minde Elixir3',
+        id: 'bd4313fbac40284b3',
         direction: 0,
         expanded: true,
-        children: [
-          {
-            topic: '选择节点分布方式',
-            id: 'bd1ba11e620c3c1a',
-            expanded: true,
-            children: [
-              {
-                topic: '左侧分布',
-                id: 'bd1c1cb51e6745d3',
-              },
-              {
-                topic: '右侧分布',
-                id: 'bd1c1e12fd603ff6',
-              },
-              {
-                topic: '左右分布',
-                id: 'bd1c1f03def5c97b',
-              },
-            ],
-          },
-        ],
       },
+      {
+        topic: '什么是 Minde Elixir4',
+        id: 'bd4313fbac40284b4',
+        direction: 1,
+        expanded: true,
+      },
+      // {
+      //   topic: '什么是 Minde Elixir5',
+      //   id: 'bd4313fbac40284b5',
+      //   direction: 0,
+      //   expanded: true,
+      // },
+      // {
+      //   topic: '什么是 Minde Elixir6',
+      //   id: 'bd4313fbac40284b6',
+      //   direction: 0,
+      //   expanded: true,
+      // },
+      // {
+      //   topic: '什么是 Minde Elixir',
+      //   id: 'bd4313fbac40284b',
+      //   direction: 0,
+      //   expanded: true,
+      //   children: [
+      //     {
+      //       topic: '一个思维导图内核',
+      //       id: 'beeb823afd6d2114',
+      //     },
+      //     {
+      //       topic: '免费',
+      //       id: 'c1f068377de9f3a0',
+      //     },
+      //     {
+      //       topic: '即将开源',
+      //       id: 'c1f06d38a09f23ca',
+      //     },
+      //     {
+      //       topic: '无框架依赖',
+      //       id: 'c1f06e4cbcf16463',
+      //       expanded: true,
+      //       children: [],
+      //     },
+      //     {
+      //       topic: '两步轻松接入已有项目',
+      //       id: 'c1f1f11a7fbf7550',
+      //       children: [
+      //         {
+      //           topic: "import MindElixir from 'mind-elixir'",
+      //           id: 'c1f1e245b0a89f9b',
+      //         },
+      //         {
+      //           topic: 'new MindElixir({...}).init(data)',
+      //           id: 'c1f1ebc7072c8928',
+      //         },
+      //       ],
+      //     },
+      //     {
+      //       topic: '使用简单',
+      //       id: 'c1f0723c07b408d7',
+      //       expanded: true,
+      //       children: [
+      //         {
+      //           topic: '操作手感类似其他主流思维导图应用',
+      //           id: 'c1f09612fd89920d',
+      //         },
+      //       ],
+      //     },
+      //   ],
+      // },
+      // {
+      //   topic: '基本操作',
+      //   id: 'bd1b66c4b56754d9',
+      //   direction: 0,
+      //   expanded: true,
+      //   children: [
+      //     {
+      //       topic: 'tab 新建子节点',
+      //       id: 'bd1b6892bcab126a',
+      //     },
+      //     {
+      //       topic: 'enter 新建同级节点',
+      //       id: 'bd1b6b632a434b27',
+      //     },
+      //     {
+      //       topic: 'del 删除节点',
+      //       id: 'bd1b983085187c0a',
+      //     },
+      //   ],
+      // },
+      // {
+      //   topic: '专注',
+      //   id: 'bd1b9b94a9a7a913',
+      //   direction: 1,
+      //   expanded: true,
+      //   children: [
+      //     {
+      //       topic: '点击右键，专注模式',
+      //       id: 'bd1bb2ac4bbab458',
+      //     },
+      //     {
+      //       topic: '需要取消专注时同样通过右键菜单，点击取消专注',
+      //       id: 'bd1bb4b14d6697c3',
+      //     },
+      //   ],
+      // },
+      // {
+      //   topic: '左侧菜单',
+      //   id: 'bd1b9d1816ede134',
+      //   direction: 0,
+      //   expanded: true,
+      //   children: [
+      //     {
+      //       topic: '选择节点分布方式',
+      //       id: 'bd1ba11e620c3c1a',
+      //       expanded: true,
+      //       children: [
+      //         {
+      //           topic: '左侧分布',
+      //           id: 'bd1c1cb51e6745d3',
+      //         },
+      //         {
+      //           topic: '右侧分布',
+      //           id: 'bd1c1e12fd603ff6',
+      //         },
+      //         {
+      //           topic: '左右分布',
+      //           id: 'bd1c1f03def5c97b',
+      //         },
+      //       ],
+      //     },
+      //   ],
+      // },
       // {
       //   topic: '下方菜单',
       //   id: 'bd1ba66996df4ba4',

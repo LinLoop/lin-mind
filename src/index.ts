@@ -506,7 +506,7 @@ MindElixir.prototype = {
 
     addParentLink(this.nodeData)
     this.toCenter()
-    this.layout()
+    this.layout(false) // 初始化不执行side排版
     this.linkDiv()
   },
 }
