@@ -68,7 +68,8 @@ function createToolBarRBContainer(mind, option) {
     console.log('failed mini', mind.miniFn, mind.miniInstance)
   }
   save.onclick = () => {
-    console.log(mind.nodeData)
+    // console.log(mind.nodeData.children.map(item=>{ return { topic:item.topic, direction:item.direction}))
+    console.log(mind.nodeData.children)
 
     if (mind.saveFn && mind.saveInstance) mind.saveFn.call(mind.saveInstance)
     console.log('failed save', mind.saveFn, mind.saveInstance)

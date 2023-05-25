@@ -19,7 +19,7 @@ declare let window: Window
 const options = {
   el: '#map',
   newTopicName: '子节点',
-  direction: MindElixir.SIDE,
+  direction: MindElixir.LEFT,
   // direction: MindElixir.RIGHT,
   locale: 'cn',
   draggable: false,

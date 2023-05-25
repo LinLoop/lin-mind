@@ -183,6 +183,7 @@ export default function (mind, option?) {
     if (depth >= mind.maxChildNode && childLength <= 1) return createToast(i18n[locale].boundaryTips)
     mind.addChild()
     resetNodeMenu()
+    isRoot = false
   }
 
   add_sibling.onclick = e => {

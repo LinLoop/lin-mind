@@ -247,7 +247,7 @@ export function createChildren(data: NodeObj[], container?: HTMLElement, directi
 }
 
 // Set primary nodes' direction and invoke createChildren()
-export function layout(layoutSide = true) {
+export function layout() {
   console.time('layout')
   this.root.innerHTML = ''
   this.box.innerHTML = ''
@@ -258,23 +258,18 @@ export function layout(layoutSide = true) {
 
   const primaryNodes: NodeObj[] = this.nodeData.children
   if (!primaryNodes || primaryNodes.length === 0) return
-  if (this.direction === SIDE && layoutSide) {
+  if (this.direction === SIDE) {
     // initiate direction of primary nodes
     // 均分左右方向
-    const hasDirection = primaryNodes.map(item => item.direction).filter(item => item !== undefined)
-    if (hasDirection.length === primaryNodes.length) {
-      const half = Math.ceil(primaryNodes.length / 2)
-      const tranceDirection = primaryNodes[half - 1].direction === LEFT ? RIGHT : LEFT
-      const originDirection = tranceDirection === LEFT ? RIGHT : LEFT
-      primaryNodes.forEach((item, index) => {
-        item.direction = index >= half ? tranceDirection : originDirection
-      })
-    }
-
-    console.log(
-      hasDirection,
-      primaryNodes.map(item => item.direction)
-    )
+    // const hasDirection = primaryNodes.map(item => item.direction).filter(item => item !== undefined)
+    // if (hasDirection.length === primaryNodes.length) {
+    //   const half = Math.ceil(primaryNodes.length / 2)
+    //   const tranceDirection = primaryNodes[half - 1].direction === LEFT ? RIGHT : LEFT
+    //   const originDirection = tranceDirection === LEFT ? RIGHT : LEFT
+    //   primaryNodes.forEach((item, index) => {
+    //     item.direction = index >= half ? tranceDirection : originDirection
+    //   })
+    // }
 
     let lcount = 0
     let rcount = 0
@@ -298,6 +293,7 @@ export function layout(layoutSide = true) {
         }
       })
   }
+
   this.createChildren(this.nodeData.children, this.box, this.direction)
   console.timeEnd('layout')
 }

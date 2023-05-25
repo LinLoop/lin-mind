@@ -141,7 +141,7 @@ export default function (mind) {
       if (mind.currentLink) mind.removeLink()
       else {
         mind.removeNode()
-        if (MindElixir.SIDE === mind.direction) mind.initSide()
+        mind.unselectNode()
       }
     } else {
       key2func[e.keyCode] && key2func[e.keyCode](e)

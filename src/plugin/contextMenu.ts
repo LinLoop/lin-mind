@@ -1,4 +1,3 @@
-import MindElixir from '..'
 import i18n from '../i18n'
 import { encodeHTML, isOutOfBoundary, getBranchDepth, createToast } from '../utils/index'
 import './contextMenu.less'
@@ -190,16 +189,12 @@ export default function (mind, option) {
     if (depth >= mind.maxChildNode && childLength <= 1) return createToast(i18n[locale].boundaryTips)
     mind.addChild()
     resetNodeMenu()
-    // if (MindElixir.SIDE === mind.direction) mind.initSide()
-    // menuContainer.hidden = true
   }
   add_parent.onclick = e => {
     const depth = getBranchDepth(mind.currentNode.nodeObj)
     if (depth >= mind.maxChildNode) return createToast(i18n[locale].boundaryTips)
     mind.insertParent()
     resetNodeMenu()
-    // if (MindElixir.SIDE === mind.direction) mind.initSide()
-    // menuContainer.hidden = true
   }
   add_sibling.onclick = e => {
     if (isRoot || !mind.currentNode) return
@@ -207,14 +202,11 @@ export default function (mind, option) {
     if (isOut) return createToast(i18n[locale].boundaryTips)
     mind.insertSibling()
     resetNodeMenu()
-    // if (MindElixir.SIDE === mind.direction) mind.initSide()
-    // menuContainer.hidden = true
   }
   remove_child.onclick = e => {
     if (isRoot) return
     mind.removeNode()
-    if (MindElixir.SIDE === mind.direction) mind.initSide()
-    // menuContainer.hidden = true
+    mind.unselectNode()
   }
   goback.onclick = e => {
     const gobackBtn = mind.container.querySelector('#cm-goback')

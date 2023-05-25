@@ -126,14 +126,19 @@ export const insertSibling = function (el, node) {
   children.insertBefore(grp, t.parentNode.nextSibling)
   if (children.className === 'box') {
     this.judgeDirection(grp, newNodeObj)
+    this.layout()
     this.linkDiv()
   } else {
+    this.layout()
     this.linkDiv(grp.offsetParent)
   }
   if (!node) {
     this.createInputDiv(top.children[0])
   }
-  this.selectNode(top.children[0], true)
+  const newNodeEle = findEle(newNodeObj.id)
+  this.selectNode(newNodeEle, true)
+  this.beginEdit(newNodeEle)
+  // this.selectNode(top.children[0], true)
   // console.timeEnd('insertSibling_DOM')
   this.bus.fire('operation', {
     name: 'insertSibling',
@@ -207,6 +212,7 @@ export const insertParent = function (el, node) {
     return
   }
   const newNodeObj = node || this.generateNewObj()
+  newNodeObj.direction = nodeObj.direction
   insertParentNodeObj(nodeObj, newNodeObj)
   addParentLink(this.nodeData)
 
@@ -268,10 +274,12 @@ export const addChildFunction = function (nodeEle, node) {
       top.appendChild(createExpander(true))
       top.insertAdjacentElement('afterend', c)
     }
+    this.layout()
     this.linkDiv(grp.offsetParent)
   } else if (top.tagName === 'ROOT') {
     this.judgeDirection(grp, newNodeObj)
     top.nextSibling.appendChild(grp)
+    this.layout()
     this.linkDiv()
   }
   return { newTop, newNodeObj }
@@ -300,7 +308,10 @@ export const addChild = function (el: NodeElement, node: NodeObj, history = true
   if (!node) {
     this.createInputDiv(newTop.children[0])
   }
-  this.selectNode(newTop.children[0], true)
+  const newNodeEle = findEle(newNodeObj.id)
+  this.selectNode(newNodeEle, true)
+  this.beginEdit(newNodeEle)
+  // this.selectNode(newTop.children[0], true)
 }
 // uncertain link disappear sometimes??
 // TODO while direction = SIDE, move up won't change the direction of primary node

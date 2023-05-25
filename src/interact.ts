@@ -1,4 +1,5 @@
 import { findEle } from './utils/dom'
+import { LEFT, RIGHT } from './const'
 /**
  * @exports -
  * workaround for jsdoc
@@ -295,6 +296,18 @@ export const initRight = function () {
  */
 export const initSide = function () {
   this.direction = 2
+  // 均分左右方向
+  const primaryNodes = this.nodeData.children
+  if (!primaryNodes || primaryNodes.length === 0) return
+  const hasDirection = primaryNodes.map(item => [0, 1].includes(item.direction)).filter(item => item !== undefined)
+  if (hasDirection.length === primaryNodes.length) {
+    const half = Math.ceil(primaryNodes.length / 2)
+    const tranceDirection = primaryNodes[half - 1].direction === LEFT ? RIGHT : LEFT
+    const originDirection = tranceDirection === LEFT ? RIGHT : LEFT
+    primaryNodes.forEach((item, index) => {
+      item.direction = index >= half ? tranceDirection : originDirection
+    })
+  }
   this.refresh()
 }
 
