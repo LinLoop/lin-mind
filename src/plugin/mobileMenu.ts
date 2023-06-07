@@ -120,7 +120,6 @@ export default function (mind, option?) {
     'touchmove',
     throttle(function () {
       menuContainer.hidden = true
-      rightBar.hidden = true
     }, 1500)
   )
 
@@ -130,6 +129,9 @@ export default function (mind, option?) {
   })
 
   mind.bus.addListener('selectNode', function (nodeObj) {
+    const nmenu = mind.container.querySelector('nmenu')
+    nmenu.hidden = true
+
     mind.currentLink = null
     menuContainer.hidden = false
     rightBar.hidden = false
@@ -166,6 +168,7 @@ export default function (mind, option?) {
     nmenu.style.top = '35px'
     nmenu.style.right = '50px'
     nmenu.hidden = false
+    rightBar.hidden = true
   }
 
   remove.onclick = e => {
