@@ -36,6 +36,7 @@
     user-select: none;
     transition: all 0.3s;
     transform: scale(1);
+    // background: pink;
     background: #f6f6f6;
     .selected {
       outline: 2px solid #4dc4ff;
@@ -48,8 +49,10 @@
         padding: 10px @GAP;
         background-color: rgb(0, 170, 255);
         border-radius: 5px;
+        max-width: 800px;
         font-size: 25px;
         white-space: pre-wrap;
+        word-break: break-word;
 
         #input-box {
           padding: 10px @GAP;
@@ -253,3 +256,23 @@
   direction: ltr;
   user-select: auto;
 }
+
+// 兼容ios contenteditable不生效问题
+input,
+textarea,
+[contenteditable] {
+  -webkit-user-select: text;
+  user-select: text;
+}
+// html {
+/* 兼容 iOS < 11.2 */
+// padding-top: constant(safe-area-inset-top);
+// padding-left: constant(safe-area-inset-left);
+// padding-right: constant(safe-area-inset-right);
+// margin-bottom: constant(safe-area-inset-bottom);
+/* 兼容 iOS >= 11.2 */
+// padding-top: env(safe-area-inset-top);
+// padding-left: env(safe-area-inset-left);
+// padding-right: env(safe-area-inset-right);
+// margin-bottom: env(safe-area-inset-bottom);
+// }

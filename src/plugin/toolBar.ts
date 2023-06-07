@@ -68,9 +68,15 @@ function createToolBarRBContainer(mind, option) {
     console.log('failed mini', mind.miniFn, mind.miniInstance)
   }
   save.onclick = () => {
-    // console.log(mind.nodeData.children.map(item=>{ return { topic:item.topic, direction:item.direction}))
-    console.log(mind.nodeData.children)
-
+    mind.unselectNode()
+    const goback = document.querySelector('#cm-goback')
+    if (goback) goback.classList.add('disabled')
+    mind.history = [] // 保存后不能撤回
+    if (mind.isFocusMode) {
+      // 专注模式下重置root
+      mind.direction = mind.tempDirection
+      mind.nodeData.root = false
+    }
     if (mind.saveFn && mind.saveInstance) mind.saveFn.call(mind.saveInstance)
     console.log('failed save', mind.saveFn, mind.saveInstance)
   }

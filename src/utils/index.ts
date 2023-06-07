@@ -324,8 +324,8 @@ export function moveUpObj(obj: NodeObj) {
   const index = childrenList.indexOf(obj)
   const t = childrenList[index]
   if (index === 0) {
-    childrenList[index] = childrenList[childrenList.length - 1]
-    childrenList[childrenList.length - 1] = t
+    childrenList.push(t)
+    childrenList.splice(0, 1)
   } else {
     childrenList[index] = childrenList[index - 1]
     childrenList[index - 1] = t
@@ -337,8 +337,8 @@ export function moveDownObj(obj: NodeObj) {
   const index = childrenList.indexOf(obj)
   const t = childrenList[index]
   if (index === childrenList.length - 1) {
-    childrenList[index] = childrenList[0]
-    childrenList[0] = t
+    childrenList.splice(childrenList.length - 1, 1)
+    childrenList.unshift(t)
   } else {
     childrenList[index] = childrenList[index + 1]
     childrenList[index + 1] = t

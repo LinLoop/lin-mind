@@ -5,7 +5,7 @@ const pti = require('puppeteer-to-istanbul')
 let browser = null
 let page = null
 // https://github.com/istanbuljs/puppeteer-to-istanbul
-beforeAll(async() => {
+beforeAll(async () => {
   browser = await puppeteer.launch({
     // headless: false,
     // devtools: true
@@ -21,7 +21,7 @@ beforeAll(async() => {
 })
 
 describe('nodeOperation', () => {
-  it('addChild"', async() => {
+  it('addChild"', async () => {
     await page.evaluate(`m.addChild(E('bd1f07c598e729dc'))`)
     await page.waitForSelector('#input-box')
     await page.keyboard.press('Enter')
@@ -30,7 +30,7 @@ describe('nodeOperation', () => {
     })
     expect(id).toEqual('bd1f07c598e729dc')
   })
-  it('insertSibling"', async() => {
+  it('insertSibling"', async () => {
     await page.evaluate(`m.insertSibling(E('bd1f07c598e729dc'))`)
     const newId = await page.evaluate(`currentOperation.obj.id`)
     await page.waitForSelector('#input-box')
@@ -48,7 +48,7 @@ describe('nodeOperation', () => {
     expect(res[0]).toEqual(true)
     expect(res[1]).toEqual(true)
   })
-  it('insertBefore"', async() => {
+  it('insertBefore"', async () => {
     await page.evaluate(`m.insertBefore(E('bd1f07c598e729dc'))`)
     await page.keyboard.press('Enter')
     const res = await page.evaluate(() => {
@@ -65,14 +65,13 @@ describe('nodeOperation', () => {
     expect(res[0]).toEqual(true)
     expect(res[1]).toEqual(true)
   })
-  it('moveNode"', async() => {
-    const res = await page.evaluate(async() => {
+  it('moveNode"', async () => {
+    const res = await page.evaluate(async () => {
       let from = E('bd1f07c598e729dc')
       let to = E('bd1babdd5c18a7a2')
       await m.moveNode(from, to)
 
-      const domCheck =
-        from.closest('children').previousElementSibling === to.parentNode
+      const domCheck = from.closest('children').previousElementSibling === to.parentNode
 
       from = from.nodeObj
       to = to.nodeObj
@@ -83,14 +82,13 @@ describe('nodeOperation', () => {
     expect(res[0]).toEqual(true)
     expect(res[1]).toEqual(true)
   })
-  it('moveNodeBefore"', async() => {
-    const res = await page.evaluate(async() => {
+  it('moveNodeBefore"', async () => {
+    const res = await page.evaluate(async () => {
       let from = E('bd1f07c598e729dc')
       let to = E('bd1babdd5c18a7a2')
       await m.moveNodeBefore(from, to)
 
-      const domCheck =
-        from.closest('grp') === to.closest('grp').previousElementSibling
+      const domCheck = from.closest('grp') === to.closest('grp').previousElementSibling
 
       from = from.nodeObj
       to = to.nodeObj
@@ -105,14 +103,13 @@ describe('nodeOperation', () => {
     expect(res[0]).toEqual(true)
     expect(res[1]).toEqual(true)
   })
-  it('moveNodeAfter"', async() => {
-    const res = await page.evaluate(async() => {
+  it('moveNodeAfter"', async () => {
+    const res = await page.evaluate(async () => {
       let from = E('bd1f07c598e729dc')
       let to = E('bd1babdd5c18a7a2')
       await m.moveNodeAfter(from, to)
 
-      const domCheck =
-        from.closest('grp').previousElementSibling === to.closest('grp')
+      const domCheck = from.closest('grp').previousElementSibling === to.closest('grp')
 
       from = from.nodeObj
       to = to.nodeObj
@@ -127,8 +124,8 @@ describe('nodeOperation', () => {
     expect(res[0]).toEqual(true)
     expect(res[1]).toEqual(true)
   })
-  it('removeNode"', async() => {
-    const res = await page.evaluate(async() => {
+  it('removeNode"', async () => {
+    const res = await page.evaluate(async () => {
       const el = E('bd1f07c598e729dc')
       await m.removeNode(el)
 
@@ -141,7 +138,7 @@ describe('nodeOperation', () => {
     expect(res[0]).toBeFalsy()
     expect(res[1]).toBeFalsy()
 
-    const delRoot = await page.evaluate(async() => {
+    const delRoot = await page.evaluate(async () => {
       const el = E('root')
       try {
         await m.removeNode(el)
@@ -153,7 +150,7 @@ describe('nodeOperation', () => {
   })
 })
 
-afterAll(async() => {
+afterAll(async () => {
   // const [jsCoverage, cssCoverage] = await Promise.all([
   //   page.coverage.stopJSCoverage(),
   //   page.coverage.stopCSSCoverage(),

@@ -97,6 +97,7 @@ export const createTopic = function (nodeObj: NodeObj): Topic {
 
 export function selectText(div: HTMLElement) {
   const range = $d.createRange()
+
   range.selectNodeContents(div)
   const getSelection = window.getSelection()
   if (getSelection) {
@@ -146,7 +147,7 @@ export function createInputDiv(tpc: Topic) {
     }
   })
 
-  div.addEventListener('blur', () => {
+  div.addEventListener('blur', e => {
     if (!div) return
     const node = tpc.nodeObj
     const topic = div.textContent!.trim()
@@ -157,6 +158,14 @@ export function createInputDiv(tpc: Topic) {
     if (topic === origin) return
     tpc.childNodes[0].textContent = node.topic
     this.linkDiv()
+
+    const canvsContainer = document.querySelector('.map-canvas .box')
+    const lastChild = canvsContainer.lastElementChild
+    if (lastChild) {
+      const style = window.getComputedStyle(lastChild)
+      if (parseInt(style.top) > 20000 || parseInt(style.height) > 20000) createToast('文字篇幅过长，请调整')
+    }
+
     this.bus.fire('operation', {
       name: 'finishEdit',
       obj: node,

@@ -1,5 +1,4 @@
 import './mobileMenu.less'
-import MindElixir from '..'
 import i18n from '../i18n'
 import { findEle } from '../utils/dom'
 import { isOutOfBoundary, getBranchDepth, createToast, throttle } from '../utils/index'
@@ -106,6 +105,16 @@ export default function (mind, option?) {
   mind.container.append(rightBar)
   let isRoot = true
 
+  const isiOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)
+  if (isiOS) {
+    window.addEventListener('scroll', function () {
+      leftBar.style.bottom = '48px'
+      rightBar.style.bottom = '48px'
+      rightBar.style.right = '96px'
+      window.scroll(0, 0)
+    })
+  }
+
   // 移动时隐藏菜单栏
   mind.container.addEventListener(
     'touchmove',
@@ -121,8 +130,10 @@ export default function (mind, option?) {
   })
 
   mind.bus.addListener('selectNode', function (nodeObj) {
+    mind.currentLink = null
     menuContainer.hidden = false
     rightBar.hidden = false
+
     // 计算菜单显示位置
     const nodeEle = findEle(nodeObj.id)
     const { top, left, width: nodeWidth } = nodeEle.getBoundingClientRect()
@@ -138,17 +149,15 @@ export default function (mind, option?) {
     menuContainer.style.top = menuTop + 'px'
     menuContainer.style.left = menuLeft + 'px'
 
-    if (nodeObj.root) {
-      isRoot = true
-    } else {
-      isRoot = false
-    }
+    isRoot = !nodeObj.parent
   })
+
   menuContainer.onclick = e => {
     if (e.target === menuContainer) menuContainer.hidden = true
   }
 
   edit.onclick = e => {
+    // console.log(mind.currentNode, 'uu')
     mind.beginEdit()
   }
 
@@ -161,9 +170,13 @@ export default function (mind, option?) {
 
   remove.onclick = e => {
     if (isRoot) return
-    if (mind.currentLink) return mind.removeLink()
+    if (mind.currentLink) {
+      mind.removeLink()
+      mind.currentLink = null
+      return
+    }
     mind.removeNode()
-    if (MindElixir.SIDE === mind.direction) mind.initSide()
+    mind.unselectNode()
   }
 
   up.onclick = e => {
@@ -180,7 +193,7 @@ export default function (mind, option?) {
     const depth = getBranchDepth(mind.currentNode.nodeObj)
     const childLength = mind.currentNode.nodeObj.children?.length ?? 0
 
-    if (depth >= mind.maxChildNode && childLength <= 1) return createToast(i18n[locale].boundaryTips)
+    if (depth >= mind.maxChildNode && childLength <= 1 && isRoot === false) return createToast(i18n[locale].boundaryTips)
     mind.addChild()
     resetNodeMenu()
     isRoot = false
@@ -199,6 +212,7 @@ export default function (mind, option?) {
   }
 
   save.onclick = () => {
+    mind.history = [] // 保存后不能撤回
     if (mind.saveFn && mind.saveInstance) mind.saveFn.call(mind.saveInstance)
     console.log('failed save', mind.saveFn, mind.saveInstance)
   }
@@ -216,7 +230,6 @@ export default function (mind, option?) {
         if (e.target.parentElement.nodeName === 'T' || e.target.parentElement.nodeName === 'ROOT') {
           mind.createLink(from, mind.currentNode)
           mind.bus.fire('operation', { name: 'linkNode', from: from.nodeObj, to: mind.currentNode.nodeObj }) // add to history
-          mind.currentLink = null // 修复创建连接线后删除节点会优先删除连接线问题
         } else {
           console.log('link cancel')
         }

@@ -185,10 +185,10 @@ export default function (mind, option) {
     if (!mind.currentNode) return
     const depth = getBranchDepth(mind.currentNode.nodeObj)
     const childLength = mind.currentNode.nodeObj.children?.length ?? 0
-
-    if (depth >= mind.maxChildNode && childLength <= 1) return createToast(i18n[locale].boundaryTips)
+    if (depth >= mind.maxChildNode && childLength <= 1 && isRoot === false) return createToast(i18n[locale].boundaryTips)
     mind.addChild()
     resetNodeMenu()
+    isRoot = false
   }
   add_parent.onclick = e => {
     const depth = getBranchDepth(mind.currentNode.nodeObj)
@@ -238,7 +238,6 @@ export default function (mind, option) {
         if (e.target.parentElement.nodeName === 'T' || e.target.parentElement.nodeName === 'ROOT') {
           mind.createLink(from, mind.currentNode)
           mind.bus.fire('operation', { name: 'linkNode', from: from.nodeObj, to: mind.currentNode.nodeObj }) // add to history
-          mind.currentLink = null // 修复创建连接线后删除节点会优先删除连接线问题
         } else {
           console.log('link cancel')
         }

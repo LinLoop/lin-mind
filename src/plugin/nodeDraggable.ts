@@ -60,18 +60,7 @@ export default function (mind) {
     ;(e.target as HTMLElement).style.opacity = ''
     clearPreview(meet)
 
-    // 超出范围提示
-    if (meet) {
-      const dragDepth = getNodeChildDepth(dragged.nodeObj)
-      const meetId = meet.getAttribute('data-nodeid').replace('me', '')
-      const meetNodeObj = findEle(meetId)
-      const meetDepth = getNodeDepth(meetNodeObj.nodeObj)
-      if (dragDepth + meetDepth > mind.maxChildNode) {
-        ;(dragged.parentNode.parentNode as Group).style.opacity = '1'
-        dragged = null
-        return createToast(i18n[locale].boundaryTips)
-      }
-    }
+    // console.log(e.target, meet)
 
     const obj = dragged.nodeObj
     switch (insertLocation) {
@@ -84,6 +73,18 @@ export default function (mind) {
         mind.selectNode(E(obj.id))
         break
       case 'in':
+        // 超出范围提示
+        if (meet) {
+          const dragDepth = getNodeChildDepth(dragged.nodeObj)
+          const meetId = meet.getAttribute('data-nodeid').replace('me', '')
+          const meetNodeObj = findEle(meetId)
+          const meetDepth = getNodeDepth(meetNodeObj.nodeObj)
+          if (dragDepth + meetDepth > mind.maxChildNode) {
+            ;(dragged.parentNode.parentNode as Group).style.opacity = '1'
+            dragged = null
+            return createToast(i18n[locale].boundaryTips)
+          }
+        }
         mind.moveNode(dragged, meet)
         break
     }

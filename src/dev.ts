@@ -22,9 +22,9 @@ const options = {
   direction: MindElixir.LEFT,
   // direction: MindElixir.RIGHT,
   locale: 'cn',
-  draggable: false,
+  draggable: true,
   editable: true,
-  contextMenu: true,
+  contextMenu: false,
   contextMenuOption: {
     focus: true,
     link: true,
@@ -38,14 +38,14 @@ const options = {
       // },
     ],
   },
-  toolBar: true,
+  toolBar: false,
   nodeMenu: true,
-  keypress: false,
+  keypress: true,
   allowUndo: true,
   allowSave: true,
   allowMinimize: true,
   allowExit: true,
-  mobileMenu: false,
+  mobileMenu: true,
   before: {
     // moveDownNode() {
     //   return false

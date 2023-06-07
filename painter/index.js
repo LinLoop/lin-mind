@@ -84,19 +84,44 @@ function RootToSvg() {
   const rootOffsetX = root.offsetLeft - maxLeft
   const fontSizeNum = +tpcStyle.fontSize.replace('px', '')
 
-  const textY = fontSizeNum + (rect.height - fontSizeNum) / 2 - fontSizeNum / 8 // 计算文本y轴位移
+  // const textY = fontSizeNum + (rect.height - fontSizeNum) / 2 - fontSizeNum / 8 // 计算文本y轴位移
 
   const svg2ndEle = $d.querySelector('.lines')
 
+  const topicOffsetLeft = left + parseInt(tpcStyle.paddingLeft)
+  const topicOffsetTop = top + parseInt(tpcStyle.paddingTop) + parseInt(tpcStyle.fontSize)
+
   const lines = `<g transform="translate(${IMG_PADDING - maxLeft}, ${IMG_PADDING - maxTop})">${svg2ndEle.innerHTML}</g>`
+  // 多行文本
+  const { text: tspans, rowsHeight } = createMultilineText(nodeObj.topic, tpcStyle.paddingLeft, tpcStyle.fontSize)
+
+  let tags = ''
+  if (nodeObj.tags && nodeObj.tags.length) {
+    const tagsEle = rootTpc.querySelectorAll('.tags > span')
+    let preTagWidth = 0
+    for (let i = 0; i < tagsEle.length; i++) {
+      const tag = tagsEle[i]
+      const tagRect = tag.getBoundingClientRect()
+      tags += `<rect x="${topicOffsetLeft + preTagWidth}" y="${topicOffsetTop + rowsHeight + 15}" rx="5px" ry="5px" width="${
+        tagRect.width
+      }" height="${tagRect.height}" 
+        style="fill: ${tpcStyle.backgroundColor}"></rect>
+        <text font-family="微软雅黑" font-size="${tpcStyle.fontSize}" fill="${tpcStyle.color}" x="${topicOffsetLeft + preTagWidth}" y="${
+        topicOffsetTop + rowsHeight + parseInt(tpcStyle.fontSize)
+      }">${tag.innerHTML}</text> `
+      preTagWidth += tagRect.width + 10
+    }
+  }
+
   return (
     lines +
     `<g id="root" transform="translate(${rootOffsetX + IMG_PADDING}, ${rootOffsetY + IMG_PADDING})">
       <rect x="${left}" y="${top}" rx="5px" ry="5px" width="${rect.width}" height="${rect.height}" style="fill: ${tpcStyle.backgroundColor};"></rect>
-      <text x="${left + 15}" y="${textY}" text-anchor="start" align="top" anchor="start" font-family="微软雅黑" 
+      <text x="${left + 15}" y="${top + fontSizeNum + 10}"  text-anchor="start" align="top" anchor="start" font-family="微软雅黑" 
       font-size="${tpcStyle.fontSize}" font-weight="${tpcStyle.fontWeight}" fill="${tpcStyle.color}">
-        ${nodeObj.topic}
+        ${tspans}
       </text>
+      ${tags} 
   </g>`
   )
 }
@@ -218,10 +243,10 @@ function createMultilineText(text, x, fontSize) {
   lines.forEach((line, index) => {
     textElement += `<tspan  x="${x}" dy="${dy}em">${line}</tspan>`
     if (index === 0) {
-      dy = 1.2 // Set the offset for the next line (usually 1.2 times font size)
+      dy = 1.25 // Set the offset for the next line (usually 1.2 times font size)
     }
   })
-  return { text: textElement, rowsHeight: (lines.length - 1) * size * 1.2 }
+  return { text: textElement, rowsHeight: (lines.length - 1) * size * 1.25 }
 }
 
 function splitMultipleLineText() {

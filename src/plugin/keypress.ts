@@ -1,6 +1,5 @@
 import { getBranchDepth, isOutOfBoundary, createToast, getNodeChildDepth, getNodeDepth } from '../utils/index'
 import i18n from '../i18n'
-import MindElixir from '..'
 
 export default function (mind) {
   const locale = i18n[mind.locale] ? mind.locale : 'en'
@@ -39,7 +38,8 @@ export default function (mind) {
       if (!mind.currentNode) return
       const depth = getBranchDepth(mind.currentNode.nodeObj)
       const childLength = mind.currentNode.nodeObj.children?.length ?? 0
-      if (depth >= mind.maxChildNode && childLength <= 1) return createToast(i18n[locale].boundaryTips)
+      const isRoot = !mind.currentNode.nodeObj.parent
+      if (depth >= mind.maxChildNode && childLength <= 1 && isRoot === false) return createToast(i18n[locale].boundaryTips)
       mind.addChild()
       resetNodeMenu()
     },
